@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FunTogether</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&family=Poppins:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Heebo',sans-serif;background:#f7f7f5;min-height:100vh;color:#1a1a1a;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;}
+.card{background:#fff;border-radius:22px;padding:28px 24px;box-shadow:0 2px 20px rgba(124,58,237,0.1);width:100%;max-width:420px;}
+.logo{text-align:center;font-size:54px;line-height:1;margin-bottom:10px;}
+.appname{text-align:center;margin-bottom:4px;font-family:'Poppins',sans-serif;font-size:28px;font-weight:900;letter-spacing:-1px;}
+.appname .p{color:#7c3aed;}.appname .t{color:#1a1a1a;}
+.tagline{text-align:center;color:#9b8ab8;font-size:13px;margin-bottom:24px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:12px 14px;border:1.5px solid #e8e3f0;border-radius:12px;font-family:inherit;font-size:14px;color:#1a1a1a;outline:none;background:#fff;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#7c3aed;}
+.row2{display:flex;gap:10px;}.row2 .fg{flex:1;}
+.btn-main,.btn-sec,.btn-danger{width:100%;padding:14px;border:none;border-radius:13px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.btn-main{background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;}
+.btn-main:disabled,.btn-sec:disabled,.btn-danger:disabled{opacity:0.6;cursor:not-allowed;}
+.btn-sec{background:#fff;color:#7c3aed;border:1.5px solid #7c3aed;}
+.btn-danger{background:#fff;color:#d14343;border:1.5px solid #d14343;}
+.err,.ok{border-radius:10px;padding:10px 14px;font-size:12px;margin-top:10px;display:none;line-height:1.5;}
+.err{background:#fff0f0;border:1px solid #ffc0c0;color:#cc0000;}
+.ok{background:#f0fff5;border:1px solid #c3f0d3;color:#147a3d;}
+.uin-box{background:linear-gradient(135deg,#f5f0ff,#ede8ff);border:1.5px solid #c4b5fd;border-radius:16px;padding:20px;text-align:center;margin:18px 0;}
+.uin-num{font-size:36px;font-weight:900;letter-spacing:6px;color:#7c3aed;font-family:'Poppins',sans-serif;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;}
+.badge{background:#f5f0ff;color:#7c3aed;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700;}
+.section-title{font-size:18px;font-weight:800;margin-bottom:14px;}
+.muted{font-size:13px;color:#8f80ab;}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+.user-card{border:1px solid #ece7f6;border-radius:16px;padding:14px;background:#fcfbff;}
+.user-card h4{font-size:16px;margin-bottom:4px;}
+.user-card p{font-size:13px;color:#6d6283;line-height:1.5;}
+.actions{display:flex;gap:10px;}
+.actions button{flex:1;}
+.small{font-size:12px;color:#8f80ab;margin-top:8px;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="sc-login">
+  <div class="logo">💜</div>
+  <div class="appname"><span class="p">Fun</span><span class="t">Together</span></div>
+  <div class="tagline">מצאו את ה-Together שלכם ✨</div>
+  <div class="card">
+    <div class="fg"><label>אימייל</label><input type="email" id="l-email" placeholder="your@email.com"></div>
+    <div class="fg"><label>סיסמה</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+    <div class="err" id="l-err"></div>
+    <button class="btn-main" id="btn-login">כניסה</button>
+    <button class="btn-sec" id="btn-to-reg">הרשמה — משתמש חדש</button>
+  </div>
+</div>
+
+<div class="screen" id="sc-register">
+  <div class="logo">✨</div>
+  <div class="appname"><span class="p">Fun</span><span class="t">Together</span></div>
+  <div class="tagline">יוצרים כרטיס משתמש בכמה שניות</div>
+  <div class="card">
+    <div class="fg"><label>שם / כינוי</label><input id="r-name" placeholder="איך יקראו לך?"></div>
+    <div class="fg"><label>אימייל</label><input type="email" id="r-email" placeholder="your@email.com"></div>
+    <div class="fg"><label>סיסמה</label><input type="password" id="r-pass" placeholder="לפחות 6 תווים"></div>
+    <div class="row2">
+      <div class="fg"><label>גיל</label><input type="number" id="r-age" min="18" placeholder="18+"></div>
+      <div class="fg"><label>מגדר</label><select id="r-gender"><option value="">בחר/י</option><option>אישה</option><option>גבר</option><option>אחר</option></select></div>
+    </div>
+    <div class="fg"><label>עיר</label><input id="r-location" placeholder="למשל מודיעין"></div>
+    <div class="fg"><label>עליי</label><textarea id="r-bio" rows="3" placeholder="כמה מילים עליך"></textarea></div>
+    <div class="err" id="r-err"></div>
+    <button class="btn-main" id="btn-register">יצירת חשבון ✨</button>
+    <button class="btn-sec" id="btn-to-login">כבר יש לי משתמש</button>
+  </div>
+</div>
+
+<div class="screen" id="sc-uin">
+  <div class="logo">🎉</div>
+  <div class="appname"><span class="p">Fun</span><span class="t">Together</span></div>
+  <div class="card" style="text-align:center;">
+    <div style="font-size:18px;font-weight:800;" id="uin-name">ברוך/ה הבא/ה!</div>
+    <div class="muted" style="margin-top:6px;">החשבון נוצר בהצלחה</div>
+    <div class="uin-box">
+      <div class="muted">מספר UIN שלך</div>
+      <div class="uin-num" id="uin-val">000000</div>
+    </div>
+    <button class="btn-main" id="btn-to-main">כניסה לאזור האישי</button>
+  </div>
+</div>
+
+<div class="screen" id="sc-main">
+  <div class="card">
+    <div class="topbar">
+      <div>
+        <div style="font-size:22px;font-weight:800;" id="main-hi">שלום!</div>
+        <div class="muted">האזור האישי שלך</div>
+      </div>
+      <div class="badge" id="main-uin">UIN</div>
+    </div>
+
+    <div class="section-title">הפרופיל שלי</div>
+    <div class="fg"><label>שם</label><input id="p-name" disabled></div>
+    <div class="fg"><label>עיר</label><input id="p-location" disabled></div>
+    <div class="fg"><label>עליי</label><textarea id="p-bio" rows="3" disabled></textarea></div>
+    <div class="ok" id="p-ok"></div>
+    <div class="err" id="p-err"></div>
+
+    <div class="actions">
+      <button class="btn-main" id="btn-edit-profile">עריכת פרופיל</button>
+      <button class="btn-sec hidden" id="btn-save-profile">שמירה</button>
+    </div>
+
+    <button class="btn-sec" id="btn-open-users">חיפוש משתמשים</button>
+    <button class="btn-danger" id="btn-logout">התנתק</button>
+    <div class="small">אם עדיין אין שרת עבור חיפוש משתמשים או עדכון פרופיל, הכפתורים כבר מוכנים ויחכו ל־API.</div>
+  </div>
+</div>
+
+<div class="screen" id="sc-users">
+  <div class="card">
+    <div class="topbar">
+      <div>
+        <div class="section-title" style="margin-bottom:4px;">חיפוש משתמשים</div>
+        <div class="muted">חפש לפי שם או עיר</div>
+      </div>
+      <div class="badge">חברים</div>
+    </div>
+
+    <div class="fg"><label>חיפוש</label><input id="search-users" placeholder="למשל יובל או מודיעין"></div>
+    <div class="err" id="u-err"></div>
+    <div class="ok" id="u-ok"></div>
+    <button class="btn-main" id="btn-search-users">חפש</button>
+    <div class="list" id="users-list"></div>
+    <button class="btn-sec" id="btn-back-main">חזרה</button>
+  </div>
+</div>
+
+<script>
+var API = "https://be0d5b7e-b90b-4001-b23d-3dfe261c0ad8-00-sy5akcvq1r0j.janeway.replit.dev";
+var token = null, user = null;
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function showBox(id, msg) { var e=document.getElementById(id); e.innerHTML=msg; e.style.display='block'; }
+function hideBox(id) { var e=document.getElementById(id); if (e) e.style.display='none'; }
+function hideAllMessages(){ ['l-err','r-err','p-err','p-ok','u-err','u-ok'].forEach(hideBox); }
+function setAuth(data){
+  token = data.token || token;
+  user = data.user || data;
+  if (token) localStorage.setItem('ft_token', token);
+  if (user) localStorage.setItem('ft_user', JSON.stringify(user));
+}
+function clearAuth(){
+  token = null; user = null;
+  localStorage.removeItem('ft_token');
+  localStorage.removeItem('ft_user');
+}
+function fillProfile(){
+  document.getElementById('main-hi').textContent = 'שלום, ' + ((user && user.name) || 'משתמש') + '! 👋';
+  document.getElementById('main-uin').textContent = (user && user.uin) ? ('UIN ' + user.uin) : 'ללא UIN';
+  document.getElementById('p-name').value = (user && user.name) || '';
+  document.getElementById('p-location').value = (user && user.location) || '';
+  document.getElementById('p-bio').value = (user && user.bio) || '';
+}
+function setProfileEditable(isEditable){
+  ['p-name','p-location','p-bio'].forEach(function(id){ document.getElementById(id).disabled = !isEditable; });
+  document.getElementById('btn-edit-profile').classList.toggle('hidden', isEditable);
+  document.getElementById('btn-save-profile').classList.toggle('hidden', !isEditable);
+}
+async function api(path, options){
+  var headers = (options && options.headers) || {};
+  if (token) headers.Authorization = 'Bearer ' + token;
+  if (!headers['Content-Type'] && !(options && options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
+  var res = await fetch(API + path, Object.assign({}, options || {}, { headers: headers }));
+  var data = null;
+  try { data = await res.json(); } catch (_) { data = null; }
+  return { res: res, data: data };
+}
+function renderUsers(items){
+  var box = document.getElementById('users-list');
+  if (!items || !items.length) {
+    box.innerHTML = '<div class="user-card"><p>לא נמצאו משתמשים.</p></div>';
+    return;
+  }
+  box.innerHTML = items.map(function(item){
+    return '<div class="user-card">'
+      + '<h4>' + (item.name || 'ללא שם') + '</h4>'
+      + '<p>עיר: ' + (item.location || 'לא צוין') + '</p>'
+      + '<p>' + (item.bio || 'אין תיאור עדיין') + '</p>'
+      + '</div>';
+  }).join('');
+}
+
+// ניווט
+
+document.getElementById('btn-to-reg').onclick = function(){ hideAllMessages(); go('sc-register'); };
+document.getElementById('btn-to-login').onclick = function(){ hideAllMessages(); go('sc-login'); };
+document.getElementById('btn-to-main').onclick = function(){ fillProfile(); go('sc-main'); };
+document.getElementById('btn-open-users').onclick = function(){ hideAllMessages(); document.getElementById('users-list').innerHTML=''; go('sc-users'); };
+document.getElementById('btn-back-main').onclick = function(){ hideAllMessages(); fillProfile(); go('sc-main'); };
+document.getElementById('btn-logout').onclick = function(){ clearAuth(); go('sc-login'); };
+
+// כניסה
+
+document.getElementById('btn-login').onclick = async function() {
+  hideBox('l-err');
+  var email = document.getElementById('l-email').value.trim();
+  var pass  = document.getElementById('l-pass').value;
+  if (!email || !pass) { showBox('l-err','נא למלא אימייל וסיסמה'); return; }
+  var btn=this; btn.textContent='מתחבר...'; btn.disabled=true;
+  try {
+    var result = await api('/api/auth/login',{method:'POST',body:JSON.stringify({email:email,password:pass})});
+    if (!result.res.ok) { showBox('l-err', (result.data && (result.data.error || result.data.message)) || 'שגיאה בכניסה'); return; }
+    setAuth(result.data || {});
+    fillProfile();
+    go('sc-main');
+  } catch(e) {
+    showBox('l-err','שגיאת חיבור לשרת');
+  } finally {
+    btn.textContent='כניסה'; btn.disabled=false;
+  }
+};
+
+// הרשמה
+
+document.getElementById('btn-register').onclick = async function() {
+  hideBox('r-err');
+  var name     = document.getElementById('r-name').value.trim();
+  var email    = document.getElementById('r-email').value.trim();
+  var pass     = document.getElementById('r-pass').value;
+  var age      = parseInt(document.getElementById('r-age').value, 10);
+  var gender   = document.getElementById('r-gender').value;
+  var location = document.getElementById('r-location').value.trim();
+  var bio      = document.getElementById('r-bio').value.trim();
+
+  if (!name)         { showBox('r-err','נא להכניס שם/כינוי'); return; }
+  if (!email)        { showBox('r-err','נא להכניס אימייל'); return; }
+  if (pass.length<6) { showBox('r-err','הסיסמה חייבת להיות לפחות 6 תווים'); return; }
+  if (!age||age<18)  { showBox('r-err','נא להכניס גיל 18 ומעלה'); return; }
+
+  var btn=this; btn.textContent='יוצר חשבון...'; btn.disabled=true;
+  try {
+    var body = {name:name, email:email, password:pass, age:age, gender:gender, bio:bio, location:location};
+    var result = await api('/api/auth/register',{method:'POST',body:JSON.stringify(body)});
+    if (!result.res.ok) {
+      var msg = (result.data && (result.data.error || result.data.message)) || 'שגיאה בהרשמה';
+      if (Array.isArray(msg)) msg = msg.map(function(e){ return e.message || JSON.stringify(e); }).join('<br>');
+      showBox('r-err',msg); return;
+    }
+    setAuth(result.data || {});
+    document.getElementById('uin-name').textContent = 'ברוכ/ה הבא/ה, ' + ((user && user.name) || name) + '!';
+    document.getElementById('uin-val').textContent  = ((result.data && result.data.uin) || (user && user.uin) || '------');
+    go('sc-uin');
+  } catch(e) {
+    showBox('r-err','לא ניתן להתחבר לשרת. ודא שהשרת ב-Replit פעיל.');
+  } finally {
+    btn.textContent='יצירת חשבון ✨'; btn.disabled=false;
+  }
+};
+
+// עריכת פרופיל
+
+document.getElementById('btn-edit-profile').onclick = function(){
+  hideAllMessages();
+  setProfileEditable(true);
+};
+
+document.getElementById('btn-save-profile').onclick = async function(){
+  hideBox('p-err'); hideBox('p-ok');
+  var body = {
+    name: document.getElementById('p-name').value.trim(),
+    location: document.getElementById('p-location').value.trim(),
+    bio: document.getElementById('p-bio').value.trim()
+  };
+  var btn=this; btn.textContent='שומר...'; btn.disabled=true;
+  try {
+    var result = await api('/api/users/me',{method:'PUT',body:JSON.stringify(body)});
+    if (!result.res.ok) {
+      showBox('p-err', 'השרת עדיין לא מחזיר עדכון פרופיל. צריך להוסיף endpoint בשם PUT /api/users/me');
+      return;
+    }
+    if (result.data && result.data.user) user = result.data.user;
+    else user = Object.assign({}, user || {}, body);
+    localStorage.setItem('ft_user', JSON.stringify(user));
+    fillProfile();
+    setProfileEditable(false);
+    showBox('p-ok','הפרופיל נשמר בהצלחה');
+  } catch(e) {
+    showBox('p-err','שגיאת חיבור בעת שמירת הפרופיל');
+  } finally {
+    btn.textContent='שמירה'; btn.disabled=false;
+  }
+};
+
+// חיפוש משתמשים
+
+document.getElementById('btn-search-users').onclick = async function(){
+  hideBox('u-err'); hideBox('u-ok');
+  var q = document.getElementById('search-users').value.trim();
+  var btn=this; btn.textContent='מחפש...'; btn.disabled=true;
+  try {
+    var result = await api('/api/users?search=' + encodeURIComponent(q), { method:'GET' });
+    if (!result.res.ok) {
+      renderUsers([]);
+      showBox('u-err','השרת עדיין לא מחזיר רשימת משתמשים. צריך להוסיף endpoint בשם GET /api/users?search=');
+      return;
+    }
+    var items = [];
+    if (Array.isArray(result.data)) items = result.data;
+    else if (Array.isArray(result.data.users)) items = result.data.users;
+    renderUsers(items);
+    showBox('u-ok','נמצאו ' + items.length + ' משתמשים');
+  } catch(e) {
+    renderUsers([]);
+    showBox('u-err','שגיאת חיבור בעת חיפוש משתמשים');
+  } finally {
+    btn.textContent='חפש'; btn.disabled=false;
+  }
+};
+
+// שחזור התחברות
+(function boot(){
+  var savedToken = localStorage.getItem('ft_token');
+  var savedUser = localStorage.getItem('ft_user');
+  if (savedToken && savedUser) {
+    token = savedToken;
+    try { user = JSON.parse(savedUser); } catch(e) { user = null; }
+    if (user) {
+      fillProfile();
+      go('sc-main');
+    }
+  }
+})();
+</script>
+</body>
+</html>
