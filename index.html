@@ -2,10 +2,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=ft23.html">
+<meta http-equiv="refresh" content="0; url=ft24.html">
 <title>FunTogether</title>
 </head>
 <body>
-<script>window.location.href = 'ft23.html';</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(reg) { reg.unregister(); });
+  });
+}
+window.location.href = 'ft24.html';
+</script>
 </body>
 </html>
