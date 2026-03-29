@@ -1,26 +1,27 @@
 {
   "name": "FunTogether",
   "short_name": "FunTogether",
-  "description": "מצאו את ה-Together שלכם",
-  "start_url": "/ft20.html",
+  "description": "מצאו את ה-Together שלכם — אפליקציית היכרויות ישראלית",
+  "start_url": "/ft26.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f7f5ff",
   "theme_color": "#7c3aed",
   "orientation": "portrait",
   "lang": "he",
   "dir": "rtl",
+  "id": "/ft26.html",
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+    { "src": "/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [],
+  "categories": ["social", "lifestyle"],
+  "shortcuts": []
 }
