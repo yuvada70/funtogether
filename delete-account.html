@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחיקת חשבון — FunTogether</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #faf8ff; color: #333; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .card { background: #fff; border-radius: 24px; padding: 36px 28px; max-width: 440px; width: 100%; box-shadow: 0 4px 24px rgba(124,58,237,0.10); }
+  .logo { text-align: center; font-size: 32px; margin-bottom: 8px; }
+  h1 { text-align: center; font-size: 22px; color: #7c3aed; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 14px; color: #aaa; margin-bottom: 28px; }
+  .warning { background: #fff5f5; border: 1.5px solid #fecaca; border-radius: 14px; padding: 14px 16px; font-size: 13px; color: #dc2626; margin-bottom: 24px; line-height: 1.6; }
+  label { font-size: 13px; font-weight: 600; color: #7c3aed; margin-bottom: 6px; display: block; }
+  input { width: 100%; padding: 12px 16px; border: 1.5px solid #ede8f8; border-radius: 12px; font-size: 14px; font-family: inherit; outline: none; background: #faf8ff; margin-bottom: 16px; }
+  input:focus { border-color: #7c3aed; background: #fff; }
+  .btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .btn-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; margin-bottom: 10px; }
+  .btn-delete:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-cancel { background: #f5f0ff; color: #7c3aed; text-decoration: none; display: block; text-align: center; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: 700; }
+  .msg { text-align: center; font-size: 14px; padding: 12px; border-radius: 10px; margin-bottom: 16px; display: none; }
+  .msg.ok { background: #f0fdf4; color: #16a34a; }
+  .msg.err { background: #fff5f5; color: #ef4444; }
+  .steps { font-size: 13px; color: #888; margin-bottom: 24px; line-height: 1.8; }
+  .steps li { margin-right: 8px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">💔</div>
+  <h1>מחיקת חשבון</h1>
+  <p class="subtitle">FunTogether — מחיקה מלאה ובלתי הפיכה</p>
+
+  <div class="warning">
+    ⚠️ <strong>שימו לב:</strong> מחיקת החשבון היא פעולה בלתי הפיכה.<br>
+    כל הנתונים שלך יימחקו לצמיתות, כולל:<br>
+    פרופיל, תמונות, הודעות וכל המידע האישי.
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <div id="form-area">
+    <label>אימייל</label>
+    <input type="email" id="email" placeholder="האימייל שלך">
+    <label>סיסמה</label>
+    <input type="password" id="pass" placeholder="הסיסמה שלך">
+    <button class="btn btn-delete" id="btn" onclick="deleteAccount()">🗑️ מחק את החשבון שלי לצמיתות</button>
+    <a href="https://funtogether.app" class="btn-cancel">ביטול — חזרה לאפליקציה</a>
+  </div>
+</div>
+
+<script>
+var API = "https://funtogether-server-production.up.railway.app";
+
+function deleteAccount() {
+  var email = document.getElementById("email").value.trim();
+  var pass  = document.getElementById("pass").value;
+  var btn   = document.getElementById("btn");
+  var msg   = document.getElementById("msg");
+
+  msg.style.display = "none";
+
+  if (!email || !pass) {
+    showMsg("נא למלא אימייל וסיסמה", "err");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "מוחק...";
+
+  // התחברות קודם
+  fetch(API + "/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email, password: pass })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (!d.token) {
+      showMsg(d.error || "אימייל או סיסמה שגויים", "err");
+      btn.disabled = false;
+      btn.textContent = "🗑️ מחק את החשבון שלי לצמיתות";
+      return;
+    }
+    // מחיקת החשבון
+    return fetch(API + "/api/users/me", {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + d.token }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d2) {
+      if (d2.success || d2.ok) {
+        document.getElementById("form-area").style.display = "none";
+        showMsg("✅ החשבון נמחק בהצלחה. מצטערים לראותך עוזב/ת.", "ok");
+      } else {
+        showMsg(d2.error || "שגיאה במחיקה, נסה שוב", "err");
+        btn.disabled = false;
+        btn.textContent = "🗑️ מחק את החשבון שלי לצמיתות";
+      }
+    });
+  })
+  .catch(function() {
+    showMsg("שגיאת חיבור לשרת", "err");
+    btn.disabled = false;
+    btn.textContent = "🗑️ מחק את החשבון שלי לצמיתות";
+  });
+}
+
+function showMsg(text, type) {
+  var el = document.getElementById("msg");
+  el.textContent = text;
+  el.className = "msg " + type;
+  el.style.display = "block";
+}
+</script>
+</body>
+</html>
