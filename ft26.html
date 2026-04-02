@@ -150,6 +150,24 @@ textarea.finput{resize:none;}
 .profile-uin{font-size:12px;color:#c4b5fd;font-family:monospace;margin-top:2px;}
 .pcard{background:#fff;border-radius:20px;padding:20px;box-shadow:0 2px 14px rgba(124,58,237,0.07);margin-bottom:12px;}
 .pcard-title{font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:14px;}
+
+/* ── USER MODAL ── */
+.umodal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;}
+.umodal-overlay.on{display:flex;}
+.umodal{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.umodal-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.umodal-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.umodal-name{font-size:18px;font-weight:800;}
+.umodal-uin{font-size:11px;color:#c4b5fd;font-family:monospace;}
+.umodal-btn{width:100%;padding:14px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:inherit;}
+.umodal-chat{background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;}
+.umodal-block{background:#fff5f5;color:#ef4444;border:1.5px solid #fecaca;}
+.umodal-report{background:#fff9f0;color:#f97316;border:1.5px solid #fed7aa;}
+.umodal-cancel{background:#f5f0ff;color:#7c3aed;}
+.umodal-msg{text-align:center;font-size:13px;padding:8px;border-radius:10px;margin-bottom:10px;display:none;}
+.umodal-msg.ok{background:#f0fdf4;color:#16a34a;}
+.umodal-msg.err{background:#fff5f5;color:#ef4444;}
 </style>
 <script>
 // Unregister old service workers
@@ -586,30 +604,97 @@ if ('serviceWorker' in navigator) {
           if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
           if (u.body_type) tags += "<span class='utag'>" + u.body_type + "</span>";
           if (u.religion) tags += "<span class='utag'>" + u.religion + "</span>";
-          html += "<div class='ucard' data-uin='" + u.uin + "' data-name='" + u.name + "'>"
+          html += "<div class='ucard' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>"
                 + "<div class='uav'>" + icon + "</div>"
                 + "<div class='uname'>" + u.name + "</div>"
                 + "<div class='uinfo'>" + (gmap[u.gender]||u.gender) + ", " + u.age + (u.location ? "<br>" + u.location : "") + "</div>"
                 + "<div style='margin-bottom:10px;'>" + tags + "</div>"
-                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "'>&#128140; שלח הודעה</button>"
+                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>&#128140; שלח הודעה</button>"
                 + "</div>";
         }
         html += "</div>";
         ge("sres").innerHTML = html;
         ge("sres").querySelectorAll(".ucard").forEach(function(c) {
           c.addEventListener("click", function(e) {
-            if (!e.target.classList.contains("chat-btn")) openChat(this.dataset.uin, this.dataset.name);
+            if (!e.target.classList.contains("chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
         ge("sres").querySelectorAll(".chat-btn").forEach(function(b) {
           b.addEventListener("click", function(e) {
             e.stopPropagation();
-            openChat(this.dataset.uin, this.dataset.name);
+            openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
       }).catch(function() {
         ge("sres").innerHTML = "<div class='empty-state'><div class='empty-icon'>&#128561;</div><div class='empty-text'>שגיאת חיבור לשרת</div></div>";
       }).finally(function() { btn.innerHTML = "&#128269; חפש עכשיו"; btn.disabled = false; });
+  }
+
+  // ── USER MODAL ──
+  var umodalUin = null, umodalNameStr = null;
+
+  function openUserModal(uin, name, gender) {
+    umodalUin = uin;
+    umodalNameStr = name;
+    var icon = gender === "female" ? "👩" : gender === "male" ? "👨" : "🧑";
+    ge("umodal-av").textContent = icon;
+    ge("umodal-name").textContent = name;
+    ge("umodal-uin").textContent = "UIN: " + uin;
+    ge("umodal-msg").style.display = "none";
+    ge("umodal-overlay").classList.add("on");
+  }
+
+  function closeUserModal(e) {
+    if (!e || e.target === ge("umodal-overlay")) {
+      ge("umodal-overlay").classList.remove("on");
+    }
+  }
+
+  function umodalChat() {
+    ge("umodal-overlay").classList.remove("on");
+    openChat(umodalUin, umodalNameStr);
+  }
+
+  function showUmodalMsg(text, type) {
+    var el = ge("umodal-msg");
+    el.textContent = text;
+    el.className = "umodal-msg " + type;
+    el.style.display = "block";
+  }
+
+  function umodalBlock() {
+    if (!confirm("האם אתה בטוח שברצונך לחסום את " + umodalNameStr + "?")) return;
+    fetch(API + "/api/users/block", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
+      body: JSON.stringify({ blocked_uin: umodalUin })
+    }).then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok || d.success) {
+          showUmodalMsg("✅ המשתמש נחסם בהצלחה", "ok");
+          setTimeout(function() { ge("umodal-overlay").classList.remove("on"); }, 1500);
+        } else {
+          showUmodalMsg("שגיאה: " + (d.error || "נסה שוב"), "err");
+        }
+      }).catch(function() { showUmodalMsg("שגיאת חיבור לשרת", "err"); });
+  }
+
+  function umodalReport() {
+    var reason = prompt("מה הסיבה לדיווח? (תאר בקצרה)");
+    if (!reason) return;
+    fetch(API + "/api/users/report", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
+      body: JSON.stringify({ reported_uin: umodalUin, reason: reason })
+    }).then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok || d.success) {
+          showUmodalMsg("✅ הדיווח נשלח, תודה", "ok");
+          setTimeout(function() { ge("umodal-overlay").classList.remove("on"); }, 1500);
+        } else {
+          showUmodalMsg("שגיאה: " + (d.error || "נסה שוב"), "err");
+        }
+      }).catch(function() { showUmodalMsg("שגיאת חיבור לשרת", "err"); });
   }
 
   // ── PROFILE ──
@@ -934,5 +1019,22 @@ function showTabGlobal(name) {
   </div>
 </div>
 
+<!-- USER MODAL -->
+<div class="umodal-overlay" id="umodal-overlay" onclick="closeUserModal(event)">
+  <div class="umodal" id="umodal">
+    <div class="umodal-header">
+      <div class="umodal-av" id="umodal-av">💕</div>
+      <div>
+        <div class="umodal-name" id="umodal-name"></div>
+        <div class="umodal-uin" id="umodal-uin"></div>
+      </div>
+    </div>
+    <div class="umodal-msg" id="umodal-msg"></div>
+    <button class="umodal-btn umodal-chat" onclick="umodalChat()">💬 שלח הודעה</button>
+    <button class="umodal-btn umodal-report" onclick="umodalReport()">🚩 דווח על משתמש</button>
+    <button class="umodal-btn umodal-block" onclick="umodalBlock()">🚫 חסום משתמש</button>
+    <button class="umodal-btn umodal-cancel" onclick="closeUserModal()">ביטול</button>
+  </div>
+</div>
 </body>
 </html>
