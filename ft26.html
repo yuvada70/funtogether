@@ -1154,7 +1154,7 @@ if ('serviceWorker' in navigator) {
   }
 
   // ── WIRE UP ──
-  document.addEventListener("DOMContentLoaded", function() {
+  (function() {
     tok = localStorage.getItem("ft_tok");
     me  = JSON.parse(localStorage.getItem("ft_me") || "null");
 
@@ -1186,14 +1186,14 @@ if ('serviceWorker' in navigator) {
 
     initPhotoSlots();
     if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
-  });
+  })();
 })();
 
 // Global wrapper for inline onclick
 
 // Forgot password - 2 step flow
 var _forgotEmail = "";
-document.addEventListener("DOMContentLoaded", function() {
+(function() {
   var lnk = document.getElementById("lnk-forgot");
   if (lnk) {
     lnk.addEventListener("click", function() {
@@ -1273,11 +1273,12 @@ document.addEventListener("DOMContentLoaded", function() {
       errEl.style.display = "block";
     }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
   });
-});
+})();
 
 // showTabGlobal merged into IIFE above
 
 // Forgot password
+</script>
 <div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
     
