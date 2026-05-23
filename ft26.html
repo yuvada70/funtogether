@@ -169,6 +169,26 @@ textarea.finput{resize:none;}
 .umodal-msg{text-align:center;font-size:13px;padding:8px;border-radius:10px;margin-bottom:10px;display:none;}
 .umodal-msg.ok{background:#f0fdf4;color:#16a34a;}
 .umodal-msg.err{background:#fff5f5;color:#ef4444;}
+
+/* ── USER MODAL PROFILE ── */
+.umodal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:480px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto;}
+.umodal-photos{display:flex;gap:4px;border-radius:24px 24px 0 0;overflow:hidden;height:200px;}
+.umodal-photos .ph{flex:1;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:48px;overflow:hidden;}
+.umodal-photos .ph img{width:100%;height:100%;object-fit:cover;}
+.umodal-body{padding:16px 16px 24px;}
+.umodal-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.umodal-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.umodal-name{font-size:18px;font-weight:800;}
+.umodal-subname{font-size:11px;color:#c4b5fd;}
+.umodal-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.umodal-detail{background:#f5f0ff;border-radius:12px;padding:10px 12px;}
+.umodal-detail-label{font-size:10px;color:#9b8ab8;font-weight:600;margin-bottom:2px;}
+.umodal-detail-value{font-size:13px;font-weight:700;color:#3b1fa8;}
+.umodal-bio{background:#faf8ff;border-radius:12px;padding:12px;font-size:13px;color:#555;line-height:1.6;margin-bottom:14px;border:1px solid #ede8f8;}
+.umodal-bio-label{font-size:10px;color:#9b8ab8;font-weight:600;margin-bottom:4px;}
+.umodal-actions{display:flex;gap:8px;margin-bottom:10px;}
+.umodal-block{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fecaca;background:#fff5f5;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.umodal-report{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fed7aa;background:#fff9f0;color:#f97316;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 </style>
 <script>
 // Unregister old service workers
@@ -642,7 +662,7 @@ if ('serviceWorker' in navigator) {
         ge("sres").innerHTML = html;
         ge("sres").querySelectorAll(".ucard").forEach(function(c) {
           c.addEventListener("click", function(e) {
-            if (!e.target.closest(".chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
+            if (!e.target.classList.contains("chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
         ge("sres").querySelectorAll(".chat-btn").forEach(function(b) {
