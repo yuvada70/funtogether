@@ -680,6 +680,10 @@ if ('serviceWorker' in navigator) {
     ge("umodal-overlay").classList.remove("on");
     openChat(umodalUin, umodalNameStr);
   }
+  window.umodalChat   = umodalChat;
+  window.umodalBlock  = umodalBlock;
+  window.umodalReport = umodalReport;
+  window.closeUserModal = closeUserModal;
 
   function showUmodalMsg(text, type) {
     var el = ge("umodal-msg");
