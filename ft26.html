@@ -14,6 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>FunTogether</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>emailjs.init("pmIRWMLWBnh0tUdQc");</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Poppins:wght@700;900&display=swap');
@@ -474,6 +475,24 @@ if ('serviceWorker' in navigator) {
   function ge(id) { return document.getElementById(id); }
   function gv(id) { return ge(id).value; }
 
+  // ── SOCKET ──
+  var socket = null;
+  function initSocket() {
+    if (socket) socket.disconnect();
+    socket = io("https://funtogether-server-production.up.railway.app", {
+      auth: { token: tok }
+    });
+    socket.on("new_message", function(data) {
+      var uin = data.sender_uin;
+      if (!chats[uin]) chats[uin] = { name: data.sender_name || uin, msgs: [] };
+      var d = new Date(), t = d.getHours() + ":" + (d.getMinutes()+"").padStart(2,"0");
+      chats[uin].msgs.push({ dir: "in", text: data.content, time: t });
+      if (activeUin === uin) { renderMsgs(); }
+      else { unread++; updateBadge(); }
+      renderCList();
+    });
+  }
+
   // ── PAGE NAV ──
   function showPage(id) {
     document.querySelectorAll(".pg").forEach(function(p) { p.classList.remove("on"); });
@@ -529,13 +548,17 @@ if ('serviceWorker' in navigator) {
       }).catch(function() {});
   }
 
+  function sanitize(str) {
+    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
   function renderMsgs() {
     if (!activeUin || !chats[activeUin]) return;
     var msgs = chats[activeUin].msgs;
     var html = "<div class='sys-msg'>&#8212; השיחה התחילה &#8212;</div>";
     for (var i = 0; i < msgs.length; i++) {
       var m = msgs[i];
-      html += "<div class='msg-" + m.dir + "'>" + m.text
+      html += "<div class='msg-" + m.dir + "'>" + sanitize(m.text)
             + "<div class='msg-time'>" + m.time + "</div></div>";
     }
     var area = ge("msgs-area");
@@ -604,9 +627,12 @@ if ('serviceWorker' in navigator) {
           if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
           if (u.body_type) tags += "<span class='utag'>" + u.body_type + "</span>";
           if (u.religion) tags += "<span class='utag'>" + u.religion + "</span>";
+          var avatarHtml = u.photo1
+            ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + u.photo1 + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
+            : "<div class='uav'>" + icon + "</div>";
           html += "<div class='ucard' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>"
-                + "<div class='uav'>" + icon + "</div>"
-                + "<div class='uname'>" + u.name + "</div>"
+                + avatarHtml
+                + "<div class='uname'>" + u.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + "</div>"
                 + "<div class='uinfo'>" + (gmap[u.gender]||u.gender) + ", " + u.age + (u.location ? "<br>" + u.location : "") + "</div>"
                 + "<div style='margin-bottom:10px;'>" + tags + "</div>"
                 + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>&#128140; שלח הודעה</button>"
@@ -748,6 +774,7 @@ if ('serviceWorker' in navigator) {
       tok = res.d.token; me = res.d;
       localStorage.setItem("ft_tok", tok); localStorage.setItem("ft_me", JSON.stringify(me));
       showApp(); loadProfile();
+      initSocket();
     }).catch(function() { errEl.textContent = "שגיאת חיבור לשרת"; errEl.style.display = "block"; })
     .finally(function() { btn.textContent = "כניסה"; btn.disabled = false; });
   }
@@ -862,7 +889,7 @@ if ('serviceWorker' in navigator) {
     });
 
     initPhotoSlots();
-    if (tok && me) { showApp(); showTab("search"); loadProfile(); }
+    if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
   });
 })();
 
