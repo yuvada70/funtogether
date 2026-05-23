@@ -171,10 +171,11 @@ textarea.finput{resize:none;}
 .umodal-detail-value{font-size:13px;font-weight:700;color:#3b1fa8;}
 .umodal-bio{background:#faf8ff;border-radius:12px;padding:12px;font-size:13px;color:#555;line-height:1.6;margin-bottom:16px;border:1px solid #ede8f8;}
 .umodal-bio-label{font-size:10px;color:#9b8ab8;font-weight:600;margin-bottom:4px;}
+.umodal-actions{display:flex;gap:8px;margin-bottom:10px;}
 .umodal-btn{width:100%;padding:14px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:inherit;}
 .umodal-chat{background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;}
-.umodal-block{background:#fff5f5;color:#ef4444;border:1.5px solid #fecaca;}
-.umodal-report{background:#fff9f0;color:#f97316;border:1.5px solid #fed7aa;}
+.umodal-block{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fecaca;background:#fff5f5;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.umodal-report{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fed7aa;background:#fff9f0;color:#f97316;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .umodal-cancel{background:#f5f0ff;color:#7c3aed;}
 .umodal-msg{text-align:center;font-size:13px;padding:8px;border-radius:10px;margin-bottom:10px;display:none;}
 .umodal-msg.ok{background:#f0fdf4;color:#16a34a;}
@@ -741,8 +742,10 @@ if ('serviceWorker' in navigator) {
       + bio
       + "<div class='umodal-msg' id='umodal-msg'></div>"
       + "<button class='umodal-btn umodal-chat' onclick='umodalChat()'>💬 שלח הודעה</button>"
-      + "<button class='umodal-btn umodal-report' onclick='umodalReport()'>🚩 דווח על משתמש</button>"
-      + "<button class='umodal-btn umodal-block' onclick='umodalBlock()'>🚫 חסום משתמש</button>"
+      + "<div class='umodal-actions'>"
+      + "<button class='umodal-report' onclick='umodalReport()'>🚩 דווח</button>"
+      + "<button class='umodal-block' onclick='umodalBlock()'>🚫 חסום</button>"
+      + "</div>"
       + "<button class='umodal-btn umodal-cancel' onclick='closeUserModal()'>ביטול</button>"
       + "</div>";
   }
