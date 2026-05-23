@@ -155,32 +155,20 @@ textarea.finput{resize:none;}
 /* ── USER MODAL ── */
 .umodal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;}
 .umodal-overlay.on{display:flex;}
-.umodal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:480px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto;}
+.umodal{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp .25s ease;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.umodal-photos{display:flex;gap:6px;margin-bottom:0;border-radius:24px 24px 0 0;overflow:hidden;height:200px;}
-.umodal-photos .ph{flex:1;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:48px;overflow:hidden;}
-.umodal-photos .ph img{width:100%;height:100%;object-fit:cover;}
-.umodal-body{padding:20px 20px 28px;}
-.umodal-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.umodal-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.umodal-name{font-size:20px;font-weight:800;}
-.umodal-subname{font-size:13px;color:#9b8ab8;}
-.umodal-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
-.umodal-detail{background:#f5f0ff;border-radius:12px;padding:10px 12px;}
-.umodal-detail-label{font-size:10px;color:#9b8ab8;font-weight:600;margin-bottom:2px;}
-.umodal-detail-value{font-size:13px;font-weight:700;color:#3b1fa8;}
-.umodal-bio{background:#faf8ff;border-radius:12px;padding:12px;font-size:13px;color:#555;line-height:1.6;margin-bottom:16px;border:1px solid #ede8f8;}
-.umodal-bio-label{font-size:10px;color:#9b8ab8;font-weight:600;margin-bottom:4px;}
-.umodal-actions{display:flex;gap:8px;margin-bottom:10px;}
+.umodal-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.umodal-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#c084fc);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.umodal-name{font-size:18px;font-weight:800;}
+.umodal-uin{font-size:11px;color:#c4b5fd;font-family:monospace;}
 .umodal-btn{width:100%;padding:14px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:inherit;}
 .umodal-chat{background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;}
-.umodal-block{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fecaca;background:#fff5f5;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.umodal-report{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fed7aa;background:#fff9f0;color:#f97316;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.umodal-block{background:#fff5f5;color:#ef4444;border:1.5px solid #fecaca;}
+.umodal-report{background:#fff9f0;color:#f97316;border:1.5px solid #fed7aa;}
 .umodal-cancel{background:#f5f0ff;color:#7c3aed;}
 .umodal-msg{text-align:center;font-size:13px;padding:8px;border-radius:10px;margin-bottom:10px;display:none;}
 .umodal-msg.ok{background:#f0fdf4;color:#16a34a;}
 .umodal-msg.err{background:#fff5f5;color:#ef4444;}
-.umodal-loading{text-align:center;padding:40px;color:#9b8ab8;font-size:14px;}
 </style>
 <script>
 // Unregister old service workers
@@ -675,78 +663,75 @@ if ('serviceWorker' in navigator) {
     umodalUin = uin;
     umodalNameStr = name;
     ge("umodal-overlay").classList.add("on");
-    ge("umodal-content").innerHTML = "<div class='umodal-loading'>⏳ טוען פרופיל...</div>";
+    ge("umodal-inner").innerHTML = "<div style='text-align:center;padding:40px;color:#9b8ab8;'>⏳ טוען פרופיל...</div>";
 
     fetch(API + "/api/users/" + uin, { headers: { Authorization: "Bearer " + tok } })
       .then(function(r) { return r.json(); })
       .then(function(u) { renderUmodal(u); })
       .catch(function() {
-        // fallback — מציג מידע בסיסי בלבד
         renderUmodal({ uin: uin, name: name, gender: gender });
       });
   }
 
   function renderUmodal(u) {
-    var API_BASE = "https://funtogether-server-production.up.railway.app";
     var gmap = { male:"זכר", female:"נקבה", other:"אחר" };
     var icon = u.gender==="female" ? "👩" : u.gender==="male" ? "👨" : "🧑";
+    var ph = [];
+    if (u.photo1) ph.push(u.photo1);
+    if (u.photo2) ph.push(u.photo2);
+    if (u.photo3) ph.push(u.photo3);
 
     // תמונות
-    var photos = "";
-    var photoCount = [u.photo1, u.photo2, u.photo3].filter(Boolean).length;
-    if (photoCount === 0) {
-      photos = "<div class='umodal-photos'><div class='ph'>" + icon + "</div></div>";
+    var photosHtml = "<div class='umodal-photos'>";
+    if (ph.length === 0) {
+      photosHtml += "<div class='ph' style='font-size:64px;'>" + icon + "</div>";
     } else {
-      photos = "<div class='umodal-photos'>";
-      [u.photo1, u.photo2, u.photo3].forEach(function(p) {
-        if (p) photos += "<div class='ph'><img src='" + API_BASE + p + "?t=" + Date.now() + "'></div>";
+      ph.forEach(function(p) {
+        photosHtml += "<div class='ph'><img src='" + API + p + "?t=" + Date.now() + "' onerror=\"this.parentElement.innerHTML='" + icon + "'\"></div>";
       });
-      photos += "</div>";
     }
+    photosHtml += "</div>";
 
     // פרטים
-    var details = "";
-    var detailsData = [
-      { label: "גיל", value: u.age ? u.age + " שנים" : null },
-      { label: "מין", value: gmap[u.gender] || u.gender },
-      { label: "עיר", value: u.location },
-      { label: "גובה", value: u.height ? u.height + " ס\"מ" : null },
-      { label: "מבנה גוף", value: u.body_type },
-      { label: "צבע עיניים", value: u.eye_color },
-      { label: "צבע שיער", value: u.hair_color },
-      { label: "גוון עור", value: u.skin_tone },
-      { label: "מצב משפחתי", value: u.marital_status },
-      { label: "דת", value: u.religion },
-      { label: "עישון", value: u.smoking }
-    ];
-    detailsData.forEach(function(d) {
-      if (d.value) {
-        details += "<div class='umodal-detail'>"
-          + "<div class='umodal-detail-label'>" + d.label + "</div>"
-          + "<div class='umodal-detail-value'>" + sanitize(String(d.value)) + "</div>"
-          + "</div>";
-      }
-    });
+    var rows = [
+      ["גיל", u.age ? u.age + " שנים" : null],
+      ["מין", gmap[u.gender] || u.gender],
+      ["עיר", u.location],
+      ["גובה", u.height ? u.height + " ס\"מ" : null],
+      ["מבנה גוף", u.body_type],
+      ["צבע עיניים", u.eye_color],
+      ["צבע שיער", u.hair_color],
+      ["גוון עור", u.skin_tone],
+      ["מצב משפחתי", u.marital_status],
+      ["דת", u.religion],
+      ["עישון", u.smoking]
+    ].filter(function(r) { return r[1]; });
 
-    // ביו
-    var bio = u.bio ? "<div class='umodal-bio'><div class='umodal-bio-label'>קצת עליי</div>" + sanitize(u.bio) + "</div>" : "";
+    var detailsHtml = rows.length ? "<div class='umodal-details'>" + rows.map(function(r) {
+      return "<div class='umodal-detail'>"
+        + "<div class='umodal-detail-label'>" + r[0] + "</div>"
+        + "<div class='umodal-detail-value'>" + String(r[1]).replace(/</g,"&lt;") + "</div>"
+        + "</div>";
+    }).join("") + "</div>" : "";
 
-    ge("umodal-content").innerHTML = photos
+    var bioHtml = u.bio ? "<div class='umodal-bio'><div class='umodal-bio-label'>קצת עליי</div>" + String(u.bio).replace(/</g,"&lt;") + "</div>" : "";
+
+    ge("umodal-inner").innerHTML = photosHtml
       + "<div class='umodal-body'>"
       + "<div class='umodal-header'>"
       + "<div class='umodal-av'>" + icon + "</div>"
-      + "<div><div class='umodal-name'>" + sanitize(u.name||"") + "</div>"
+      + "<div><div class='umodal-name'>" + String(u.name||"").replace(/</g,"&lt;") + "</div>"
       + "<div class='umodal-subname'>UIN: " + (u.uin||"") + "</div></div>"
       + "</div>"
-      + (details ? "<div class='umodal-details'>" + details + "</div>" : "")
-      + bio
+      + detailsHtml
+      + bioHtml
       + "<div class='umodal-msg' id='umodal-msg'></div>"
-      + "<button class='umodal-btn umodal-chat' onclick='umodalChat()'>💬 שלח הודעה</button>"
+      + "<button class='umodal-btn umodal-chat' onclick='window.umodalChat()'>💬 שלח הודעה</button>"
       + "<div class='umodal-actions'>"
-      + "<button class='umodal-report' onclick='umodalReport()'>🚩 דווח</button>"
-      + "<button class='umodal-block' onclick='umodalBlock()'>🚫 חסום</button>"
+      + "<button class='umodal-report' onclick='window.umodalReport()'>🚩 דווח</button>"
+      + "<button class='umodal-block' onclick='window.umodalBlock()'>🚫 חסום</button>"
       + "</div>"
-      + "<button class='umodal-btn umodal-cancel' onclick='closeUserModal()'>ביטול</button>"
+      + "<button class='umodal-btn umodal-cancel' onclick='window.closeUserModal()'>ביטול</button>"
       + "</div>";
   }
 
@@ -768,6 +753,12 @@ if ('serviceWorker' in navigator) {
     el.className = "umodal-msg " + type;
     el.style.display = "block";
   }
+
+  // חשיפה גלובלית
+  window.umodalChat     = function() { umodalChat(); };
+  window.umodalBlock    = function() { umodalBlock(); };
+  window.umodalReport   = function() { umodalReport(); };
+  window.closeUserModal = function(e) { closeUserModal(e); };
 
   function umodalBlock() {
     if (!confirm("האם אתה בטוח שברצונך לחסום את " + umodalNameStr + "?")) return;
@@ -1128,9 +1119,9 @@ function showTabGlobal(name) {
 </div>
 
 <!-- USER MODAL -->
-<div class="umodal-overlay" id="umodal-overlay" onclick="closeUserModal(event)">
+<div class="umodal-overlay" id="umodal-overlay" onclick="window.closeUserModal(event)">
   <div class="umodal" id="umodal">
-    <div id="umodal-content"></div>
+    <div id="umodal-inner"></div>
   </div>
 </div>
 </body>
