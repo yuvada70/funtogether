@@ -246,26 +246,23 @@ if ('serviceWorker' in navigator) {
       </div>
       <div class="row3">
         <div><span class="flabel">עיניים</span>
-          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="gray">אפור</option></select>
         </div>
         <div><span class="flabel">שיער</span>
-          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
+          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option></select>
         </div>
         <div><span class="flabel">עור</span>
-          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
+          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark">כהה</option></select>
         </div>
       </div>
 
       <div class="sec">רקע אישי (אופציונלי)</div>
       <div class="row2">
         <div><span class="flabel">מצב משפחתי</span>
-          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
+          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
         </div>
-        <div><span class="flabel">לאום</span>
-          <select id="r-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
-        </div>
-        <div><span class="flabel">יחס לדת</span>
-          <select id="r-religion-attitude" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="traditional">מסורתי</option><option value="religious">דתי</option><option value="other">אחר</option></select>
+        <div><span class="flabel">דת</span>
+          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="other">אחר</option></select>
         </div>
       </div>
       <span class="flabel">עישון</span>
@@ -645,7 +642,7 @@ if ('serviceWorker' in navigator) {
         ge("sres").innerHTML = html;
         ge("sres").querySelectorAll(".ucard").forEach(function(c) {
           c.addEventListener("click", function(e) {
-            if (!e.target.classList.contains("chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
+            if (!e.target.closest(".chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
         ge("sres").querySelectorAll(".chat-btn").forEach(function(b) {
@@ -706,19 +703,13 @@ if ('serviceWorker' in navigator) {
       ["צבע שיער", u.hair_color],
       ["גוון עור", u.skin_tone],
       ["מצב משפחתי", u.marital_status],
-      ["לאום", u.religion],
-      ["יחס לדת", u.religion_attitude],
+      ["דת", u.religion],
       ["עישון", u.smoking]
     ].filter(function(r) { return r[1]; });
 
-    var iconMap = {
-      "גיל":"🎂","מין":"👤","עיר":"📍","גובה":"📏","מבנה גוף":"💪",
-      "צבע עיניים":"👁️","צבע שיער":"💇","גוון עור":"🤚","מצב משפחתי":"💍",
-      "לאום":"🌍","יחס לדת":"🕍","עישון":"🚬"
-    };
     var detailsHtml = rows.length ? "<div class='umodal-details'>" + rows.map(function(r) {
       return "<div class='umodal-detail'>"
-        + "<div class='umodal-detail-label'>" + (iconMap[r[0]]||"") + " " + r[0] + "</div>"
+        + "<div class='umodal-detail-label'>" + r[0] + "</div>"
         + "<div class='umodal-detail-value'>" + String(r[1]).replace(/</g,"&lt;") + "</div>"
         + "</div>";
     }).join("") + "</div>" : "";
@@ -877,7 +868,6 @@ if ('serviceWorker' in navigator) {
     if (gv("r-skin"))          body.skin_tone      = gv("r-skin");
     if (gv("r-marital"))       body.marital_status = gv("r-marital");
     if (gv("r-religion"))      body.religion       = gv("r-religion");
-    if (gv("r-religion-attitude")) body.religion_attitude = gv("r-religion-attitude");
     if (gv("r-smoking"))       body.smoking        = gv("r-smoking");
     if (gv("r-bio").trim())    body.bio            = gv("r-bio").trim();
     var btn = ge("btn-reg"); btn.textContent = "יוצר חשבון..."; btn.disabled = true;
@@ -1120,4 +1110,19 @@ function showTabGlobal(name) {
       <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">סיסמה חדשה</span>
       <input type="password" id="forgot-newpass" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;" placeholder="לפחות 6 תווים">
       <div id="forgot-err2" style="display:none;background:#fff0f0;border:1px solid #ffc0c0;border-radius:10px;padding:10px;font-size:13px;color:#cc0000;margin-bottom:12px;text-align:center;"></div>
-      <div id="forgot-ok" style="display:none;background:#f0fff4;border:1px solid #b7f5c4;border-radius:10px;padding:10px;font-size:13px;color:#166534;margin-bo
+      <div id="forgot-ok" style="display:none;background:#f0fff4;border:1px solid #b7f5c4;border-radius:10px;padding:10px;font-size:13px;color:#166534;margin-bottom:12px;text-align:center;">הסיסמה אופסה בהצלחה! אפשר להתחבר.</div>
+      <button id="btn-forgot-reset" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">אפס סיסמה</button>
+      <button id="btn-forgot-back" style="width:100%;padding:12px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">חזור</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- USER MODAL -->
+<div class="umodal-overlay" id="umodal-overlay" onclick="window.closeUserModal(event)">
+  <div class="umodal" id="umodal">
+    <div id="umodal-inner"></div>
+  </div>
+</div>
+</body>
+</html>
