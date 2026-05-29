@@ -898,7 +898,9 @@ if ('serviceWorker' in navigator) {
       .then(function(d) {
         ge("p-name").textContent = d.name || "-";
         ge("p-uin").textContent = "UIN: " + (d.uin || "--");
-        if (me) ge("topbar-user").textContent = "שלום, " + d.name;
+        me = Object.assign(me || {}, d);
+        localStorage.setItem("ft_me", JSON.stringify(me));
+        ge("topbar-user").textContent = "שלום, " + d.name;
         ge("e-name").value = d.name || "";
         ge("e-age").value  = d.age  || "";
         ge("e-loc").value  = d.location || "";
@@ -1193,7 +1195,7 @@ if ('serviceWorker' in navigator) {
 
 // Forgot password - 2 step flow
 var _forgotEmail = "";
-(function() {
+setTimeout(function() {
   var lnk = document.getElementById("lnk-forgot");
   if (lnk) {
     lnk.addEventListener("click", function() {
@@ -1273,7 +1275,7 @@ var _forgotEmail = "";
       errEl.style.display = "block";
     }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
   });
-})();
+}, 0);
 
 // showTabGlobal merged into IIFE above
 
