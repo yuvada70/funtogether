@@ -529,6 +529,134 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+
+// Global wrapper for inline onclick
+
+// Forgot password - 2 step flow
+var _forgotEmail = "";
+document.addEventListener("DOMContentLoaded", function() {
+  var lnk = document.getElementById("lnk-forgot");
+  if (lnk) {
+    lnk.addEventListener("click", function() {
+      document.getElementById("modal-forgot").style.display = "flex";
+      document.getElementById("forgot-step1").style.display = "block";
+      document.getElementById("forgot-step2").style.display = "none";
+      document.getElementById("forgot-email").value = document.getElementById("l-email").value || "";
+      document.getElementById("forgot-err1").style.display = "none";
+    });
+  }
+
+  // Close
+  document.getElementById("btn-forgot-close").addEventListener("click", function() {
+    document.getElementById("modal-forgot").style.display = "none";
+  });
+
+  // Back
+  document.getElementById("btn-forgot-back").addEventListener("click", function() {
+    document.getElementById("forgot-step1").style.display = "block";
+    document.getElementById("forgot-step2").style.display = "none";
+  });
+
+  // Step 1: Send code
+  document.getElementById("btn-forgot-send").addEventListener("click", function() {
+    var email = document.getElementById("forgot-email").value.trim();
+    var errEl = document.getElementById("forgot-err1");
+    errEl.style.display = "none";
+    if (!email) { errEl.textContent = "נא להכניס אימייל"; errEl.style.display = "block"; return; }
+    var btn = this; btn.textContent = "שולח..."; btn.disabled = true;
+    fetch("https://funtogether-server-production.up.railway.app/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
+    }).then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.success) { errEl.textContent = data.error || "שגיאה"; errEl.style.display = "block"; return; }
+      _forgotEmail = email;
+      if (data.code) {
+        emailjs.send("funtogether", "template_d3s85ge", {
+          to_email: email, name: data.name || email,
+          message: "קוד האיפוס שלך ב-FunTogether: " + data.code + "\n\nהקוד תקף ל-15 דקות."
+        }).catch(function() {});
+      }
+      document.getElementById("forgot-step1").style.display = "none";
+      document.getElementById("forgot-step2").style.display = "block";
+      document.getElementById("forgot-code").value = "";
+      document.getElementById("forgot-newpass").value = "";
+      document.getElementById("forgot-err2").style.display = "none";
+      document.getElementById("forgot-ok").style.display = "none";
+    }).catch(function() {
+      errEl.textContent = "שגיאת חיבור. נסה שוב.";
+      errEl.style.display = "block";
+    }).finally(function() { btn.textContent = "שלח קוד"; btn.disabled = false; });
+  });
+
+  // Step 2: Reset password
+  document.getElementById("btn-forgot-reset").addEventListener("click", function() {
+    var code = document.getElementById("forgot-code").value.trim();
+    var newpass = document.getElementById("forgot-newpass").value;
+    var errEl = document.getElementById("forgot-err2");
+    var okEl = document.getElementById("forgot-ok");
+    errEl.style.display = "none"; okEl.style.display = "none";
+    if (!code) { errEl.textContent = "נא להכניס את הקוד"; errEl.style.display = "block"; return; }
+    if (newpass.length < 6) { errEl.textContent = "הסיסמה חייבת להיות לפחות 6 תווים"; errEl.style.display = "block"; return; }
+    var btn = this; btn.textContent = "מאפס..."; btn.disabled = true;
+    fetch("https://funtogether-server-production.up.railway.app/api/auth/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: _forgotEmail, code: code, new_password: newpass })
+    }).then(function(r) { return r.json().then(function(d) { return {ok:r.ok,d:d}; }); })
+    .then(function(res) {
+      if (!res.ok) { errEl.textContent = res.d.error || "שגיאה"; errEl.style.display = "block"; return; }
+      okEl.style.display = "block";
+      setTimeout(function() { document.getElementById("modal-forgot").style.display = "none"; }, 2000);
+    }).catch(function() {
+      errEl.textContent = "שגיאת חיבור. נסה שוב.";
+      errEl.style.display = "block";
+    }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
+  });
+});
+
+// showTabGlobal merged into IIFE above
+
+// Forgot password
+<div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
+    
+    <!-- שלב 1: הכנסת אימייל -->
+    <div id="forgot-step1">
+      <div style="font-size:16px;font-weight:800;margin-bottom:6px;text-align:center;">שכחתי סיסמה</div>
+      <p style="font-size:13px;color:#9b8ab8;text-align:center;margin-bottom:16px;">הכנס את האימייל שלך ונשלח לך קוד לאיפוס</p>
+      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">אימייל</span>
+      <input type="email" id="forgot-email" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;" placeholder="your@email.com">
+      <div id="forgot-err1" style="display:none;background:#fff0f0;border:1px solid #ffc0c0;border-radius:10px;padding:10px;font-size:13px;color:#cc0000;margin-bottom:12px;text-align:center;"></div>
+      <button id="btn-forgot-send" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">שלח קוד</button>
+      <button id="btn-forgot-close" style="width:100%;padding:12px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">סגור</button>
+    </div>
+
+    <!-- שלב 2: הכנסת קוד וסיסמה חדשה -->
+    <div id="forgot-step2" style="display:none;">
+      <div style="font-size:16px;font-weight:800;margin-bottom:6px;text-align:center;">איפוס סיסמה</div>
+      <p style="font-size:13px;color:#9b8ab8;text-align:center;margin-bottom:16px;">נשלח קוד לאימייל שלך. הכנס אותו יחד עם הסיסמה החדשה.</p>
+      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">קוד שקיבלת במייל</span>
+      <input type="text" id="forgot-code" maxlength="6" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:20px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:8px;" placeholder="000000">
+      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">סיסמה חדשה</span>
+      <input type="password" id="forgot-newpass" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;" placeholder="לפחות 6 תווים">
+      <div id="forgot-err2" style="display:none;background:#fff0f0;border:1px solid #ffc0c0;border-radius:10px;padding:10px;font-size:13px;color:#cc0000;margin-bottom:12px;text-align:center;"></div>
+      <div id="forgot-ok" style="display:none;background:#f0fff4;border:1px solid #b7f5c4;border-radius:10px;padding:10px;font-size:13px;color:#166534;margin-bottom:12px;text-align:center;">הסיסמה אופסה בהצלחה! אפשר להתחבר.</div>
+      <button id="btn-forgot-reset" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">אפס סיסמה</button>
+      <button id="btn-forgot-back" style="width:100%;padding:12px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">חזור</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- USER MODAL -->
+<div class="umodal-overlay" id="umodal-overlay" onclick="window.closeUserModal(event)">
+  <div class="umodal" id="umodal">
+    <div id="umodal-inner"></div>
+  </div>
+</div>
+
 <script>
 (function() {
   var API = "https://funtogether-server-production.up.railway.app";
@@ -898,9 +1026,7 @@ if ('serviceWorker' in navigator) {
       .then(function(d) {
         ge("p-name").textContent = d.name || "-";
         ge("p-uin").textContent = "UIN: " + (d.uin || "--");
-        me = Object.assign(me || {}, d);
-        localStorage.setItem("ft_me", JSON.stringify(me));
-        ge("topbar-user").textContent = "שלום, " + d.name;
+        if (me) ge("topbar-user").textContent = "שלום, " + d.name;
         ge("e-name").value = d.name || "";
         ge("e-age").value  = d.age  || "";
         ge("e-loc").value  = d.location || "";
@@ -1156,167 +1282,38 @@ if ('serviceWorker' in navigator) {
   }
 
   // ── WIRE UP ──
-  (function() {
-    tok = localStorage.getItem("ft_tok");
-    me  = JSON.parse(localStorage.getItem("ft_me") || "null");
+  tok = localStorage.getItem("ft_tok");
+  me  = JSON.parse(localStorage.getItem("ft_me") || "null");
 
-    ge("btn-login").addEventListener("click", doLogin);
-    ge("btn-toreg").addEventListener("click", function() { showPage("pg-reg"); });
-    ge("btn-reg").addEventListener("click", doRegister);
-    ge("btn-tologin").addEventListener("click", function() { showPage("pg-login"); });
-    ge("btn-toapp").addEventListener("click", function() { showApp(); loadProfile(); });
-    ge("btn-search").addEventListener("click", doSearch);
-    ge("btn-back").addEventListener("click", function() {
-      ge("cwin").classList.remove("on");
-      ge("clist-wrap").style.display = "block";
-      activeUin = null; renderCList();
-    });
-    ge("btn-send").addEventListener("click", doSend);
-    ge("msg-inp").addEventListener("keydown", function(e) { if (e.key === "Enter") doSend(); });
-    ge("btn-save").addEventListener("click", doSave);
-    if (ge("btn-change-pass")) ge("btn-change-pass").addEventListener("click", doChangePass);
-    ge("btn-logout").addEventListener("click", function() {
-      if (socket) { socket.disconnect(); socket = null; }
-      localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
-      tok = null; me = null; chats = {}; activeUin = null;
-      showPage("pg-login");
-    });
+  ge("btn-login").addEventListener("click", doLogin);
+  ge("btn-toreg").addEventListener("click", function() { showPage("pg-reg"); });
+  ge("btn-reg").addEventListener("click", doRegister);
+  ge("btn-tologin").addEventListener("click", function() { showPage("pg-login"); });
+  ge("btn-toapp").addEventListener("click", function() { showApp(); loadProfile(); });
+  ge("btn-search").addEventListener("click", doSearch);
+  ge("btn-back").addEventListener("click", function() {
+    ge("cwin").classList.remove("on");
+    ge("clist-wrap").style.display = "block";
+    activeUin = null; renderCList();
+  });
+  ge("btn-send").addEventListener("click", doSend);
+  ge("msg-inp").addEventListener("keydown", function(e) { if (e.key === "Enter") doSend(); });
+  ge("btn-save").addEventListener("click", doSave);
+  if (ge("btn-change-pass")) ge("btn-change-pass").addEventListener("click", doChangePass);
+  ge("btn-logout").addEventListener("click", function() {
+    if (socket) { socket.disconnect(); socket = null; }
+    localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
+    tok = null; me = null; chats = {}; activeUin = null;
+    showPage("pg-login");
+  });
 
-    document.querySelectorAll(".bnav-btn").forEach(function(btn) {
-      btn.addEventListener("click", function() { showTab(this.dataset.tab); });
-    });
+  document.querySelectorAll(".bnav-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() { showTab(this.dataset.tab); });
+  });
 
-    initPhotoSlots();
-    if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
-  })();
+  initPhotoSlots();
+  if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
 })();
 
-// Global wrapper for inline onclick
-
-// Forgot password - 2 step flow
-var _forgotEmail = "";
-setTimeout(function() {
-  var lnk = document.getElementById("lnk-forgot");
-  if (lnk) {
-    lnk.addEventListener("click", function() {
-      document.getElementById("modal-forgot").style.display = "flex";
-      document.getElementById("forgot-step1").style.display = "block";
-      document.getElementById("forgot-step2").style.display = "none";
-      document.getElementById("forgot-email").value = document.getElementById("l-email").value || "";
-      document.getElementById("forgot-err1").style.display = "none";
-    });
-  }
-
-  // Close
-  document.getElementById("btn-forgot-close").addEventListener("click", function() {
-    document.getElementById("modal-forgot").style.display = "none";
-  });
-
-  // Back
-  document.getElementById("btn-forgot-back").addEventListener("click", function() {
-    document.getElementById("forgot-step1").style.display = "block";
-    document.getElementById("forgot-step2").style.display = "none";
-  });
-
-  // Step 1: Send code
-  document.getElementById("btn-forgot-send").addEventListener("click", function() {
-    var email = document.getElementById("forgot-email").value.trim();
-    var errEl = document.getElementById("forgot-err1");
-    errEl.style.display = "none";
-    if (!email) { errEl.textContent = "נא להכניס אימייל"; errEl.style.display = "block"; return; }
-    var btn = this; btn.textContent = "שולח..."; btn.disabled = true;
-    fetch("https://funtogether-server-production.up.railway.app/api/auth/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email })
-    }).then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (!data.success) { errEl.textContent = data.error || "שגיאה"; errEl.style.display = "block"; return; }
-      _forgotEmail = email;
-      if (data.code) {
-        emailjs.send("funtogether", "template_d3s85ge", {
-          to_email: email, name: data.name || email,
-          message: "קוד האיפוס שלך ב-FunTogether: " + data.code + "\n\nהקוד תקף ל-15 דקות."
-        }).catch(function() {});
-      }
-      document.getElementById("forgot-step1").style.display = "none";
-      document.getElementById("forgot-step2").style.display = "block";
-      document.getElementById("forgot-code").value = "";
-      document.getElementById("forgot-newpass").value = "";
-      document.getElementById("forgot-err2").style.display = "none";
-      document.getElementById("forgot-ok").style.display = "none";
-    }).catch(function() {
-      errEl.textContent = "שגיאת חיבור. נסה שוב.";
-      errEl.style.display = "block";
-    }).finally(function() { btn.textContent = "שלח קוד"; btn.disabled = false; });
-  });
-
-  // Step 2: Reset password
-  document.getElementById("btn-forgot-reset").addEventListener("click", function() {
-    var code = document.getElementById("forgot-code").value.trim();
-    var newpass = document.getElementById("forgot-newpass").value;
-    var errEl = document.getElementById("forgot-err2");
-    var okEl = document.getElementById("forgot-ok");
-    errEl.style.display = "none"; okEl.style.display = "none";
-    if (!code) { errEl.textContent = "נא להכניס את הקוד"; errEl.style.display = "block"; return; }
-    if (newpass.length < 6) { errEl.textContent = "הסיסמה חייבת להיות לפחות 6 תווים"; errEl.style.display = "block"; return; }
-    var btn = this; btn.textContent = "מאפס..."; btn.disabled = true;
-    fetch("https://funtogether-server-production.up.railway.app/api/auth/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: _forgotEmail, code: code, new_password: newpass })
-    }).then(function(r) { return r.json().then(function(d) { return {ok:r.ok,d:d}; }); })
-    .then(function(res) {
-      if (!res.ok) { errEl.textContent = res.d.error || "שגיאה"; errEl.style.display = "block"; return; }
-      okEl.style.display = "block";
-      setTimeout(function() { document.getElementById("modal-forgot").style.display = "none"; }, 2000);
-    }).catch(function() {
-      errEl.textContent = "שגיאת חיבור. נסה שוב.";
-      errEl.style.display = "block";
-    }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
-  });
-}, 0);
-
-// showTabGlobal merged into IIFE above
-
-// Forgot password
-</script>
-<div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
-    
-    <!-- שלב 1: הכנסת אימייל -->
-    <div id="forgot-step1">
-      <div style="font-size:16px;font-weight:800;margin-bottom:6px;text-align:center;">שכחתי סיסמה</div>
-      <p style="font-size:13px;color:#9b8ab8;text-align:center;margin-bottom:16px;">הכנס את האימייל שלך ונשלח לך קוד לאיפוס</p>
-      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">אימייל</span>
-      <input type="email" id="forgot-email" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;" placeholder="your@email.com">
-      <div id="forgot-err1" style="display:none;background:#fff0f0;border:1px solid #ffc0c0;border-radius:10px;padding:10px;font-size:13px;color:#cc0000;margin-bottom:12px;text-align:center;"></div>
-      <button id="btn-forgot-send" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">שלח קוד</button>
-      <button id="btn-forgot-close" style="width:100%;padding:12px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">סגור</button>
-    </div>
-
-    <!-- שלב 2: הכנסת קוד וסיסמה חדשה -->
-    <div id="forgot-step2" style="display:none;">
-      <div style="font-size:16px;font-weight:800;margin-bottom:6px;text-align:center;">איפוס סיסמה</div>
-      <p style="font-size:13px;color:#9b8ab8;text-align:center;margin-bottom:16px;">נשלח קוד לאימייל שלך. הכנס אותו יחד עם הסיסמה החדשה.</p>
-      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">קוד שקיבלת במייל</span>
-      <input type="text" id="forgot-code" maxlength="6" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:20px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:8px;" placeholder="000000">
-      <span style="font-size:12px;color:#9b8ab8;font-weight:600;margin-bottom:4px;display:block;">סיסמה חדשה</span>
-      <input type="password" id="forgot-newpass" style="width:100%;padding:12px 14px;border:1.5px solid #ede8f8;border-radius:12px;font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;" placeholder="לפחות 6 תווים">
-      <div id="forgot-err2" style="display:none;background:#fff0f0;border:1px solid #ffc0c0;border-radius:10px;padding:10px;font-size:13px;color:#cc0000;margin-bottom:12px;text-align:center;"></div>
-      <div id="forgot-ok" style="display:none;background:#f0fff4;border:1px solid #b7f5c4;border-radius:10px;padding:10px;font-size:13px;color:#166534;margin-bottom:12px;text-align:center;">הסיסמה אופסה בהצלחה! אפשר להתחבר.</div>
-      <button id="btn-forgot-reset" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">אפס סיסמה</button>
-      <button id="btn-forgot-back" style="width:100%;padding:12px;background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">חזור</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- USER MODAL -->
-<div class="umodal-overlay" id="umodal-overlay" onclick="window.closeUserModal(event)">
-  <div class="umodal" id="umodal">
-    <div id="umodal-inner"></div>
-  </div>
-</div>
 </body>
 </html>
