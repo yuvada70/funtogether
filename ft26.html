@@ -845,10 +845,6 @@ document.addEventListener("DOMContentLoaded", function() {
         for (var i = 0; i < users.length; i++) {
           var u = users[i];
           var icon = u.gender==="female" ? "&#x1F469;" : u.gender==="male" ? "&#x1F468;" : "&#x1F9D1;";
-          var tags = "";
-          if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
-          if (u.body_type) tags += "<span class='utag'>" + tr(u.body_type) + "</span>";
-          if (u.religion) tags += "<span class='utag'>" + tr(u.religion) + "</span>";
           var avatarHtml = u.photo1
             ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + u.photo1 + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
             : "<div class='uav'>" + icon + "</div>";
@@ -856,21 +852,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 + avatarHtml
                 + "<div class='uname'>" + u.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + "</div>"
                 + "<div class='uinfo'>" + (gmap[u.gender]||u.gender) + ", " + u.age + (u.location ? "<br>" + u.location : "") + "</div>"
-                + "<div style='margin-bottom:10px;'>" + tags + "</div>"
-                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>&#128140; שלח הודעה</button>"
+                + "<div style='display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px;'>"
+                + "<button class='btn btn-sm details-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "' style='background:#f5f0ff;color:#7c3aed;border:1.5px solid #ede8f8;font-size:11px;padding:5px 10px;'>&#128065; פרטים נוספים</button>"
+                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "' style='font-size:11px;padding:5px 10px;'>&#128140; שלח הודעה</button>"
+                + "</div>"
                 + "</div>";
         }
         html += "</div>";
         ge("sres").innerHTML = html;
-        ge("sres").querySelectorAll(".ucard").forEach(function(c) {
-          c.addEventListener("click", function(e) {
-            if (!e.target.classList.contains("chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
+        ge("sres").querySelectorAll(".details-btn").forEach(function(b) {
+          b.addEventListener("click", function(e) {
+            e.stopPropagation();
+            openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
         ge("sres").querySelectorAll(".chat-btn").forEach(function(b) {
           b.addEventListener("click", function(e) {
             e.stopPropagation();
-            openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
+            var uin = this.dataset.uin, name = this.dataset.name;
+            openChat(uin, name);
           });
         });
       }).catch(function() {
