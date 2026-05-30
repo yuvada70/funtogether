@@ -260,31 +260,33 @@ if ('serviceWorker' in navigator) {
       <div class="sec">מראה חיצוני (אופציונלי)</div>
       <div class="row2">
         <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder="170"></div>
-        <div><span class="flabel">מסגרת גוף</span>
-          <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
+        <div><span class="flabel">מבנה גוף</span>
+          <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option><option value="full">מלא</option><option value="other">אחר</option></select>
         </div>
       </div>
       <div class="row3">
         <div><span class="flabel">עיניים</span>
-          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="gray">אפור</option></select>
+          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="almond">שקד</option><option value="gray">אפור</option><option value="other">אחר</option></select>
         </div>
         <div><span class="flabel">שיער</span>
-          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option></select>
+          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
         </div>
         <div><span class="flabel">עור</span>
-          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark">כהה</option></select>
+          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="black">שחור</option><option value="dark">כהה</option><option value="other">אחר</option></select>
         </div>
       </div>
 
       <div class="sec">רקע אישי (אופציונלי)</div>
       <div class="row2">
         <div><span class="flabel">מצב משפחתי</span>
-          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
+          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option><option value="other">אחר</option></select>
         </div>
-        <div><span class="flabel">דת</span>
-          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="other">אחר</option></select>
+        <div><span class="flabel">לאום</span>
+          <select id="r-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
         </div>
       </div>
+      <span class="flabel">זיקה לדת</span>
+      <select id="r-religion-attitude" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="traditional">מסורתי</option><option value="religious">דתי</option><option value="other">אחר</option></select>
       <span class="flabel">עישון</span>
       <select id="r-smoking" class="finput"><option value="">--</option><option value="no">לא מעשן/ת</option><option value="occasionally">לפעמים</option><option value="yes">מעשן/ת</option></select>
       <span class="flabel">קצת עליי</span>
@@ -461,7 +463,7 @@ if ('serviceWorker' in navigator) {
           <div class="row3">
             <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="e-height" class="finput" placeholder="170"></div>
             <div><span class="flabel">מבנה גוף</span>
-              <select id="e-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
+              <select id="e-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option><option value="full">מלא</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">עישון</span>
               <select id="e-smoking" class="finput"><option value="">--</option><option value="no">לא</option><option value="occasionally">לפעמים</option><option value="yes">כן</option></select>
@@ -469,20 +471,20 @@ if ('serviceWorker' in navigator) {
           </div>
           <div class="row3">
             <div><span class="flabel">עיניים</span>
-              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="almond">שקד</option><option value="gray">אפור</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">שיער</span>
               <select id="e-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">עור</span>
-              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
+              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="black">שחור</option><option value="dark">כהה</option><option value="other">אחר</option></select>
             </div>
           </div>
 
           <div class="sec" style="font-size:11px;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;padding-bottom:6px;border-bottom:1.5px solid #ede8f8;">רקע אישי</div>
           <div class="row2">
             <div><span class="flabel">מצב משפחתי</span>
-              <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
+              <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">לאום</span>
               <select id="e-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
@@ -530,8 +532,7 @@ if ('serviceWorker' in navigator) {
 </div>
 
 
-// Global wrapper for inline onclick
-
+<script>
 // Forgot password - 2 step flow
 var _forgotEmail = "";
 document.addEventListener("DOMContentLoaded", function() {
@@ -617,8 +618,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // showTabGlobal merged into IIFE above
+</script>
 
-// Forgot password
+<!-- Forgot password modal -->
 <div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
     
@@ -923,7 +925,7 @@ document.addEventListener("DOMContentLoaded", function() {
       ["צבע שיער", u.hair_color],
       ["גוון עור", u.skin_tone],
       ["מצב משפחתי", u.marital_status],
-      ["דת", u.religion],
+      ["לאום", u.religion],
       ["עישון", u.smoking]
     ].filter(function(r) { return r[1]; });
 
@@ -1162,6 +1164,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (gv("r-skin"))          body.skin_tone      = gv("r-skin");
     if (gv("r-marital"))       body.marital_status = gv("r-marital");
     if (gv("r-religion"))      body.religion       = gv("r-religion");
+    if (gv("r-religion-attitude")) body.religion_attitude = gv("r-religion-attitude");
     if (gv("r-smoking"))       body.smoking        = gv("r-smoking");
     if (gv("r-bio").trim())    body.bio            = gv("r-bio").trim();
     var btn = ge("btn-reg"); btn.textContent = "יוצר חשבון..."; btn.disabled = true;
@@ -1314,6 +1317,7 @@ document.addEventListener("DOMContentLoaded", function() {
   initPhotoSlots();
   if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
 })();
+</script>
 
 </body>
 </html>
