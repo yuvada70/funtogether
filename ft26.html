@@ -1332,7 +1332,14 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   initPhotoSlots();
-  if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
+  if (tok && me) {
+    fetch(API + "/api/users/me", { headers: { Authorization: "Bearer " + tok } })
+      .then(function(r) {
+        if (r.ok) { showApp(); showTab("search"); loadProfile(); initSocket(); }
+        else { handleUnauth(); }
+      })
+      .catch(function() { showApp(); showTab("search"); loadProfile(); initSocket(); });
+  }
 })();
 </script>
 
