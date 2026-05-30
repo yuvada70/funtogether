@@ -238,7 +238,7 @@ if ('serviceWorker' in navigator) {
       <span class="flabel">סיסמה * (לפחות 6 תווים)</span>
       <input type="password" id="r-pass" class="finput" placeholder="••••••••">
       <div class="row2">
-        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" placeholder="25" min="18" max="120"></div>
+        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" placeholder="" min="18" max="120"></div>
         <div><span class="flabel">מגדר *</span>
           <select id="r-gender" class="finput"><option value="male">זכר</option><option value="female">נקבה</option><option value="other">אחר</option></select>
         </div>
@@ -259,7 +259,7 @@ if ('serviceWorker' in navigator) {
 
       <div class="sec">מראה חיצוני (אופציונלי)</div>
       <div class="row2">
-        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder="170"></div>
+        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder=""></div>
         <div><span class="flabel">מבנה גוף</span>
           <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option><option value="full">מלא</option><option value="other">אחר</option></select>
         </div>
@@ -847,8 +847,8 @@ document.addEventListener("DOMContentLoaded", function() {
           var icon = u.gender==="female" ? "&#x1F469;" : u.gender==="male" ? "&#x1F468;" : "&#x1F9D1;";
           var tags = "";
           if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
-          if (u.body_type) tags += "<span class='utag'>" + u.body_type + "</span>";
-          if (u.religion) tags += "<span class='utag'>" + u.religion + "</span>";
+          if (u.body_type) tags += "<span class='utag'>" + tr(u.body_type) + "</span>";
+          if (u.religion) tags += "<span class='utag'>" + tr(u.religion) + "</span>";
           var avatarHtml = u.photo1
             ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + u.photo1 + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
             : "<div class='uav'>" + icon + "</div>";
@@ -876,6 +876,22 @@ document.addEventListener("DOMContentLoaded", function() {
       }).catch(function() {
         ge("sres").innerHTML = "<div class='empty-state'><div class='empty-icon'>&#128561;</div><div class='empty-text'>שגיאת חיבור לשרת</div></div>";
       }).finally(function() { btn.innerHTML = "&#128269; חפש עכשיו"; btn.disabled = false; });
+  }
+
+
+  function tr(val) {
+    var map = {
+      slim:'רזה', average:'בינוני', athletic:'ספורטיבי', heavy:'שמן', full:'מלא',
+      brown:'חום', blue:'כחול', green:'ירוק', honey:'דבש', almond:'שקד', gray:'אפור', hazel:'אגוז',
+      black:'שחור', blonde:'בלונד', red:'אדום', satani:'שטני',
+      fair:'בהיר', dark_brown:'שחום', dark:'כהה',
+      single:'רווק/ה', married:'נשוי/ה', divorced:'גרוש/ה', widowed:'אלמן/ה', separated:'פרוד/ה',
+      jewish:'יהודי', muslim:'מוסלמי', christian:'נוצרי', druze:'דרוזי',
+      secular:'חילוני', traditional:'מסורתי', religious:'דתי',
+      no:'לא מעשן/ת', occasionally:'לפעמים', yes:'מעשן/ת',
+      male:'זכר', female:'נקבה', other:'אחר'
+    };
+    return map[val] || val || '';
   }
 
   // ── USER MODAL ──
@@ -920,13 +936,14 @@ document.addEventListener("DOMContentLoaded", function() {
       ["מין", gmap[u.gender] || u.gender],
       ["עיר", u.location],
       ["גובה", u.height ? u.height + " ס\"מ" : null],
-      ["מבנה גוף", u.body_type],
-      ["צבע עיניים", u.eye_color],
-      ["צבע שיער", u.hair_color],
-      ["גוון עור", u.skin_tone],
-      ["מצב משפחתי", u.marital_status],
-      ["לאום", u.religion],
-      ["עישון", u.smoking]
+      ["מבנה גוף", tr(u.body_type)],
+      ["צבע עיניים", tr(u.eye_color)],
+      ["צבע שיער", tr(u.hair_color)],
+      ["גוון עור", tr(u.skin_tone)],
+      ["מצב משפחתי", tr(u.marital_status)],
+      ["לאום", tr(u.religion)],
+      ["זיקה לדת", tr(u.religion_attitude)],
+      ["עישון", tr(u.smoking)]
     ].filter(function(r) { return r[1]; });
 
     var detailsHtml = rows.length ? "<div class='umodal-details'>" + rows.map(function(r) {
