@@ -674,10 +674,42 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // ── SOCKET ──
   var socket = null;
+  var pollInterval = null;
+
+  function pollMessages() {
+    if (!activeUin || !tok) return;
+    fetch(API + "/api/messages/" + activeUin, { headers: { Authorization: "Bearer " + tok } })
+      .then(function(r) { if (r.status === 401) { handleUnauth(); return Promise.reject(); } return r.json(); })
+      .then(function(d) {
+        if (!d.messages) return;
+        var cur = chats[activeUin] ? chats[activeUin].msgs.length : 0;
+        var incoming = d.messages.map(function(m) {
+          return { dir: m.sender_uin === me.uin ? "out" : "in", text: m.content, time: (m.created_at || "").substring(11,16) };
+        });
+        if (incoming.length !== cur) {
+          chats[activeUin].msgs = incoming;
+          renderMsgs();
+        }
+      }).catch(function() {});
+  }
+
   function initSocket() {
     if (socket) socket.disconnect();
+    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     socket = io("https://funtogether-server-production.up.railway.app", {
-      auth: { token: tok }
+      auth: { token: tok },
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 2000
+    });
+    socket.on("connect", function() {
+      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+    });
+    socket.on("disconnect", function() {
+      pollInterval = setInterval(pollMessages, 4000);
+    });
+    socket.on("connect_error", function() {
+      if (!pollInterval) pollInterval = setInterval(pollMessages, 4000);
     });
     socket.on("new_message", function(data) {
       var uin = data.sender_uin;
@@ -698,6 +730,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function handleUnauth() {
     if (socket) { socket.disconnect(); socket = null; }
+    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
     tok = null; me = null; chats = {}; activeUin = null;
     showPage("pg-login");
@@ -756,6 +789,7 @@ document.addEventListener("DOMContentLoaded", function() {
           renderMsgs();
         }
         ge("cwin-status").textContent = "מחובר/ת";
+        if (!pollInterval) pollInterval = setInterval(pollMessages, 5000);
       }).catch(function() { ge("cwin-status").textContent = ""; });
   }
 
@@ -1322,6 +1356,7 @@ document.addEventListener("DOMContentLoaded", function() {
   if (ge("btn-change-pass")) ge("btn-change-pass").addEventListener("click", doChangePass);
   ge("btn-logout").addEventListener("click", function() {
     if (socket) { socket.disconnect(); socket = null; }
+    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
     tok = null; me = null; chats = {}; activeUin = null;
     showPage("pg-login");
