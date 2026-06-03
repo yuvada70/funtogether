@@ -534,7 +534,7 @@ if ('serviceWorker' in navigator) {
 
 // Forgot password - 2 step flow
 var _forgotEmail = "";
-document.addEventListener("DOMContentLoaded", function() {
+(function() {
   var lnk = document.getElementById("lnk-forgot");
   if (lnk) {
     lnk.addEventListener("click", function() {
@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function() {
       errEl.style.display = "block";
     }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
   });
-});
+})();
 
 // showTabGlobal merged into IIFE above
 
