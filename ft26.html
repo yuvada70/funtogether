@@ -238,7 +238,7 @@ if ('serviceWorker' in navigator) {
       <span class="flabel">סיסמה * (לפחות 6 תווים)</span>
       <input type="password" id="r-pass" class="finput" placeholder="••••••••">
       <div class="row2">
-        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" placeholder="" min="18" max="120"></div>
+        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" placeholder="25" min="18" max="120"></div>
         <div><span class="flabel">מגדר *</span>
           <select id="r-gender" class="finput"><option value="male">זכר</option><option value="female">נקבה</option><option value="other">אחר</option></select>
         </div>
@@ -259,34 +259,32 @@ if ('serviceWorker' in navigator) {
 
       <div class="sec">מראה חיצוני (אופציונלי)</div>
       <div class="row2">
-        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder=""></div>
-        <div><span class="flabel">מבנה גוף</span>
-          <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option><option value="full">מלא</option><option value="other">אחר</option></select>
+        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder="170"></div>
+        <div><span class="flabel">מסגרת גוף</span>
+          <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
         </div>
       </div>
       <div class="row3">
         <div><span class="flabel">עיניים</span>
-          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="almond">שקד</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="gray">אפור</option></select>
         </div>
         <div><span class="flabel">שיער</span>
-          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
+          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option></select>
         </div>
         <div><span class="flabel">עור</span>
-          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="black">שחור</option><option value="dark">כהה</option><option value="other">אחר</option></select>
+          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark">כהה</option></select>
         </div>
       </div>
 
       <div class="sec">רקע אישי (אופציונלי)</div>
       <div class="row2">
         <div><span class="flabel">מצב משפחתי</span>
-          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option><option value="other">אחר</option></select>
+          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
         </div>
-        <div><span class="flabel">לאום</span>
-          <select id="r-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
+        <div><span class="flabel">דת</span>
+          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="other">אחר</option></select>
         </div>
       </div>
-      <span class="flabel">זיקה לדת</span>
-      <select id="r-religion-attitude" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="traditional">מסורתי</option><option value="religious">דתי</option><option value="other">אחר</option></select>
       <span class="flabel">עישון</span>
       <select id="r-smoking" class="finput"><option value="">--</option><option value="no">לא מעשן/ת</option><option value="occasionally">לפעמים</option><option value="yes">מעשן/ת</option></select>
       <span class="flabel">קצת עליי</span>
@@ -416,19 +414,19 @@ if ('serviceWorker' in navigator) {
 
             <div style="text-align:center;">
               <div id="prev-1" style="width:100%;aspect-ratio:1;border-radius:14px;background:#f0ebff;border:2px dashed #c4b5fd;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;cursor:pointer;">&#x1F4F7;</div>
-              <input type="file" id="file-1" accept="image/*" capture="environment" style="display:none;">
+              <input type="file" id="file-1" accept="image/*" style="display:none;">
               <button onclick="document.getElementById('file-1').click()" style="margin-top:6px;width:100%;padding:8px 4px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">&#x2B06; העלה</button>
             </div>
 
             <div style="text-align:center;">
               <div id="prev-2" style="width:100%;aspect-ratio:1;border-radius:14px;background:#f0ebff;border:2px dashed #c4b5fd;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;cursor:pointer;">&#x2795;</div>
-              <input type="file" id="file-2" accept="image/*" capture="environment" style="display:none;">
+              <input type="file" id="file-2" accept="image/*" style="display:none;">
               <button onclick="document.getElementById('file-2').click()" style="margin-top:6px;width:100%;padding:8px 4px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">&#x2B06; העלה</button>
             </div>
 
             <div style="text-align:center;">
               <div id="prev-3" style="width:100%;aspect-ratio:1;border-radius:14px;background:#f0ebff;border:2px dashed #c4b5fd;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;cursor:pointer;">&#x2795;</div>
-              <input type="file" id="file-3" accept="image/*" capture="environment" style="display:none;">
+              <input type="file" id="file-3" accept="image/*" style="display:none;">
               <button onclick="document.getElementById('file-3').click()" style="margin-top:6px;width:100%;padding:8px 4px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">&#x2B06; העלה</button>
             </div>
 
@@ -463,7 +461,7 @@ if ('serviceWorker' in navigator) {
           <div class="row3">
             <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="e-height" class="finput" placeholder="170"></div>
             <div><span class="flabel">מבנה גוף</span>
-              <select id="e-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option><option value="full">מלא</option><option value="other">אחר</option></select>
+              <select id="e-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
             </div>
             <div><span class="flabel">עישון</span>
               <select id="e-smoking" class="finput"><option value="">--</option><option value="no">לא</option><option value="occasionally">לפעמים</option><option value="yes">כן</option></select>
@@ -471,20 +469,20 @@ if ('serviceWorker' in navigator) {
           </div>
           <div class="row3">
             <div><span class="flabel">עיניים</span>
-              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="almond">שקד</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">שיער</span>
               <select id="e-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">עור</span>
-              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="black">שחור</option><option value="dark">כהה</option><option value="other">אחר</option></select>
+              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
             </div>
           </div>
 
           <div class="sec" style="font-size:11px;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;padding-bottom:6px;border-bottom:1.5px solid #ede8f8;">רקע אישי</div>
           <div class="row2">
             <div><span class="flabel">מצב משפחתי</span>
-              <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option><option value="other">אחר</option></select>
+              <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
             </div>
             <div><span class="flabel">לאום</span>
               <select id="e-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
@@ -532,7 +530,8 @@ if ('serviceWorker' in navigator) {
 </div>
 
 
-<script>
+// Global wrapper for inline onclick
+
 // Forgot password - 2 step flow
 var _forgotEmail = "";
 document.addEventListener("DOMContentLoaded", function() {
@@ -618,9 +617,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // showTabGlobal merged into IIFE above
-</script>
 
-<!-- Forgot password modal -->
+// Forgot password
 <div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
     
@@ -674,42 +672,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // ── SOCKET ──
   var socket = null;
-  var pollInterval = null;
-
-  function pollMessages() {
-    if (!activeUin || !tok) return;
-    fetch(API + "/api/messages/" + activeUin, { headers: { Authorization: "Bearer " + tok } })
-      .then(function(r) { if (r.status === 401) { handleUnauth(); return Promise.reject(); } return r.json(); })
-      .then(function(d) {
-        if (!d.messages) return;
-        var cur = chats[activeUin] ? chats[activeUin].msgs.length : 0;
-        var incoming = d.messages.map(function(m) {
-          return { dir: m.sender_uin === me.uin ? "out" : "in", text: m.content, time: (m.created_at || "").substring(11,16) };
-        });
-        if (incoming.length !== cur) {
-          chats[activeUin].msgs = incoming;
-          renderMsgs();
-        }
-      }).catch(function() {});
-  }
-
   function initSocket() {
     if (socket) socket.disconnect();
-    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     socket = io("https://funtogether-server-production.up.railway.app", {
-      auth: { token: tok },
-      reconnection: true,
-      reconnectionAttempts: 10,
-      reconnectionDelay: 2000
-    });
-    socket.on("connect", function() {
-      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-    });
-    socket.on("disconnect", function() {
-      pollInterval = setInterval(pollMessages, 4000);
-    });
-    socket.on("connect_error", function() {
-      if (!pollInterval) pollInterval = setInterval(pollMessages, 4000);
+      auth: { token: tok }
     });
     socket.on("new_message", function(data) {
       var uin = data.sender_uin;
@@ -730,7 +696,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function handleUnauth() {
     if (socket) { socket.disconnect(); socket = null; }
-    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
     tok = null; me = null; chats = {}; activeUin = null;
     showPage("pg-login");
@@ -789,7 +754,6 @@ document.addEventListener("DOMContentLoaded", function() {
           renderMsgs();
         }
         ge("cwin-status").textContent = "מחובר/ת";
-        if (!pollInterval) pollInterval = setInterval(pollMessages, 5000);
       }).catch(function() { ge("cwin-status").textContent = ""; });
   }
 
@@ -879,6 +843,10 @@ document.addEventListener("DOMContentLoaded", function() {
         for (var i = 0; i < users.length; i++) {
           var u = users[i];
           var icon = u.gender==="female" ? "&#x1F469;" : u.gender==="male" ? "&#x1F468;" : "&#x1F9D1;";
+          var tags = "";
+          if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
+          if (u.body_type) tags += "<span class='utag'>" + u.body_type + "</span>";
+          if (u.religion) tags += "<span class='utag'>" + u.religion + "</span>";
           var avatarHtml = u.photo1
             ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + u.photo1 + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
             : "<div class='uav'>" + icon + "</div>";
@@ -886,46 +854,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 + avatarHtml
                 + "<div class='uname'>" + u.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + "</div>"
                 + "<div class='uinfo'>" + (gmap[u.gender]||u.gender) + ", " + u.age + (u.location ? "<br>" + u.location : "") + "</div>"
-                + "<div style='display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px;'>"
-                + "<button class='btn btn-sm details-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "' style='background:#f5f0ff;color:#7c3aed;border:1.5px solid #ede8f8;font-size:11px;padding:5px 10px;'>&#128065; פרטים נוספים</button>"
-                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "' style='font-size:11px;padding:5px 10px;'>&#128140; שלח הודעה</button>"
-                + "</div>"
+                + "<div style='margin-bottom:10px;'>" + tags + "</div>"
+                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>&#128140; שלח הודעה</button>"
                 + "</div>";
         }
         html += "</div>";
         ge("sres").innerHTML = html;
-        ge("sres").querySelectorAll(".details-btn").forEach(function(b) {
-          b.addEventListener("click", function(e) {
-            e.stopPropagation();
-            openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
+        ge("sres").querySelectorAll(".ucard").forEach(function(c) {
+          c.addEventListener("click", function(e) {
+            if (!e.target.classList.contains("chat-btn")) openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
         ge("sres").querySelectorAll(".chat-btn").forEach(function(b) {
           b.addEventListener("click", function(e) {
             e.stopPropagation();
-            var uin = this.dataset.uin, name = this.dataset.name;
-            openChat(uin, name);
+            openUserModal(this.dataset.uin, this.dataset.name, this.dataset.gender);
           });
         });
       }).catch(function() {
         ge("sres").innerHTML = "<div class='empty-state'><div class='empty-icon'>&#128561;</div><div class='empty-text'>שגיאת חיבור לשרת</div></div>";
       }).finally(function() { btn.innerHTML = "&#128269; חפש עכשיו"; btn.disabled = false; });
-  }
-
-
-  function tr(val) {
-    var map = {
-      slim:'רזה', average:'בינוני', athletic:'ספורטיבי', heavy:'שמן', full:'מלא',
-      brown:'חום', blue:'כחול', green:'ירוק', honey:'דבש', almond:'שקד', gray:'אפור', hazel:'אגוז',
-      black:'שחור', blonde:'בלונד', red:'אדום', satani:'שטני',
-      fair:'בהיר', dark_brown:'שחום', dark:'כהה',
-      single:'רווק/ה', married:'נשוי/ה', divorced:'גרוש/ה', widowed:'אלמן/ה', separated:'פרוד/ה',
-      jewish:'יהודי', muslim:'מוסלמי', christian:'נוצרי', druze:'דרוזי',
-      secular:'חילוני', traditional:'מסורתי', religious:'דתי',
-      no:'לא מעשן/ת', occasionally:'לפעמים', yes:'מעשן/ת',
-      male:'זכר', female:'נקבה', other:'אחר'
-    };
-    return map[val] || val || '';
   }
 
   // ── USER MODAL ──
@@ -970,14 +918,13 @@ document.addEventListener("DOMContentLoaded", function() {
       ["מין", gmap[u.gender] || u.gender],
       ["עיר", u.location],
       ["גובה", u.height ? u.height + " ס\"מ" : null],
-      ["מבנה גוף", tr(u.body_type)],
-      ["צבע עיניים", tr(u.eye_color)],
-      ["צבע שיער", tr(u.hair_color)],
-      ["גוון עור", tr(u.skin_tone)],
-      ["מצב משפחתי", tr(u.marital_status)],
-      ["לאום", tr(u.religion)],
-      ["זיקה לדת", tr(u.religion_attitude)],
-      ["עישון", tr(u.smoking)]
+      ["מבנה גוף", u.body_type],
+      ["צבע עיניים", u.eye_color],
+      ["צבע שיער", u.hair_color],
+      ["גוון עור", u.skin_tone],
+      ["מצב משפחתי", u.marital_status],
+      ["דת", u.religion],
+      ["עישון", u.smoking]
     ].filter(function(r) { return r[1]; });
 
     var detailsHtml = rows.length ? "<div class='umodal-details'>" + rows.map(function(r) {
@@ -1215,7 +1162,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (gv("r-skin"))          body.skin_tone      = gv("r-skin");
     if (gv("r-marital"))       body.marital_status = gv("r-marital");
     if (gv("r-religion"))      body.religion       = gv("r-religion");
-    if (gv("r-religion-attitude")) body.religion_attitude = gv("r-religion-attitude");
     if (gv("r-smoking"))       body.smoking        = gv("r-smoking");
     if (gv("r-bio").trim())    body.bio            = gv("r-bio").trim();
     var btn = ge("btn-reg"); btn.textContent = "יוצר חשבון..."; btn.disabled = true;
@@ -1356,7 +1302,6 @@ document.addEventListener("DOMContentLoaded", function() {
   if (ge("btn-change-pass")) ge("btn-change-pass").addEventListener("click", doChangePass);
   ge("btn-logout").addEventListener("click", function() {
     if (socket) { socket.disconnect(); socket = null; }
-    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
     tok = null; me = null; chats = {}; activeUin = null;
     showPage("pg-login");
@@ -1367,16 +1312,8 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   initPhotoSlots();
-  if (tok && me) {
-    fetch(API + "/api/users/me", { headers: { Authorization: "Bearer " + tok } })
-      .then(function(r) {
-        if (r.ok) { showApp(); showTab("search"); loadProfile(); initSocket(); }
-        else { handleUnauth(); }
-      })
-      .catch(function() { showApp(); showTab("search"); loadProfile(); initSocket(); });
-  }
+  if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
 })();
-</script>
 
 </body>
 </html>
