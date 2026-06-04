@@ -15,7 +15,7 @@
 <title>FunTogether</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>emailjs.init("pmIRWMLWBnh0tUdQc");</script>
+<script>if(typeof emailjs !== "undefined") emailjs.init("pmIRWMLWBnh0tUdQc");</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Poppins:wght@700;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -573,7 +573,7 @@ var _forgotEmail = "";
       if (!data.success) { errEl.textContent = data.error || "שגיאה"; errEl.style.display = "block"; return; }
       _forgotEmail = email;
       if (data.code) {
-        emailjs.send("funtogether", "template_d3s85ge", {
+        if(typeof emailjs !== "undefined") emailjs.send("funtogether", "template_d3s85ge", {
           to_email: email, name: data.name || email,
           message: "קוד האיפוס שלך ב-FunTogether: " + data.code + "\n\nהקוד תקף ל-15 דקות."
         }).catch(function() {});
