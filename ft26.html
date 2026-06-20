@@ -191,11 +191,8 @@ textarea.finput{resize:none;}
 .umodal-report{flex:1;padding:10px;border-radius:12px;border:1.5px solid #fed7aa;background:#fff9f0;color:#f97316;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 </style>
 <script>
-// Unregister old service workers
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (var reg of registrations) { reg.unregister(); }
-  });
+  navigator.serviceWorker.register('/sw.js');
 }
 </script>
 </head>
@@ -671,6 +668,41 @@ var _forgotEmail = "";
   function gv(id) { return ge(id).value; }
   function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
+  // ── PUSH NOTIFICATIONS ──
+  var VAPID_PUBLIC_KEY = "BIRq4vJTtuNAjZ6vOodR-IF0QBpLVzdRw_uOnqSMDggrMCFH4_O_x8_6jGufZolsubsAjAQq2Fal8EWH3QDpvfw";
+  function urlBase64ToUint8Array(base64String) {
+    var padding = "=".repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+    for (var i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+  function setupPush() {
+    if (!tok) return;
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    if (Notification.permission === "denied") return;
+    navigator.serviceWorker.ready.then(function(reg) {
+      return reg.pushManager.getSubscription().then(function(existing) {
+        if (existing) return existing;
+        return Notification.requestPermission().then(function(perm) {
+          if (perm !== "granted") return null;
+          return reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+        });
+      });
+    }).then(function(sub) {
+      if (!sub) return;
+      fetch(API + "/api/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
+        body: JSON.stringify({ subscription: sub.toJSON() })
+      });
+    }).catch(function() {});
+  }
+
   // ── SOCKET ──
   var socket = null;
   function initSocket() {
@@ -1140,7 +1172,7 @@ var _forgotEmail = "";
       tok = res.d.token; me = res.d;
       localStorage.setItem("ft_tok", tok); localStorage.setItem("ft_me", JSON.stringify(me));
       showApp(); loadProfile();
-      initSocket();
+      initSocket(); setupPush();
     }).catch(function() { errEl.textContent = "שגיאת חיבור לשרת"; errEl.style.display = "block"; })
     .finally(function() { btn.textContent = "כניסה"; btn.disabled = false; });
   }
@@ -1290,7 +1322,7 @@ var _forgotEmail = "";
   ge("btn-toreg").addEventListener("click", function() { showPage("pg-reg"); });
   ge("btn-reg").addEventListener("click", doRegister);
   ge("btn-tologin").addEventListener("click", function() { showPage("pg-login"); });
-  ge("btn-toapp").addEventListener("click", function() { showApp(); loadProfile(); });
+  ge("btn-toapp").addEventListener("click", function() { showApp(); loadProfile(); initSocket(); setupPush(); });
   ge("btn-search").addEventListener("click", doSearch);
   ge("btn-back").addEventListener("click", function() {
     ge("cwin").classList.remove("on");
@@ -1313,7 +1345,7 @@ var _forgotEmail = "";
   });
 
   initPhotoSlots();
-  if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); }
+  if (tok && me) { showApp(); showTab("search"); loadProfile(); initSocket(); setupPush(); }
 })();
 </script>
 
