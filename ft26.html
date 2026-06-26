@@ -492,6 +492,14 @@ if ('serviceWorker' in navigator) {
           <button class="btn" id="btn-save">שמור שינויים</button>
         </div>
         <div class="pcard">
+          <div class="pcard-title">&#128276; התראות</div>
+          <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:6px 0;">
+            <span style="font-size:14px;font-weight:700;color:#3d2c5c;">קבלת התראות על הודעות והתאמות</span>
+            <input type="checkbox" id="push-toggle" style="width:20px;height:20px;accent-color:#7c3aed;">
+          </label>
+          <div id="push-status" style="font-size:12px;color:#9b8ab8;margin-top:4px;line-height:1.6;"></div>
+        </div>
+        <div class="pcard">
           <div class="pcard-title">&#128274; שינוי סיסמה</div>
           <span class="flabel">סיסמה נוכחית</span>
           <input type="password" id="e-pass-old" class="finput" placeholder="••••••••">
@@ -678,29 +686,86 @@ var _forgotEmail = "";
     for (var i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
     return outputArray;
   }
-  function setupPush() {
-    if (!tok) return;
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
-    if (Notification.permission === "denied") return;
-    navigator.serviceWorker.ready.then(function(reg) {
+  function isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+  function isStandalone() { return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true; }
+  function pushSupported() { return ("serviceWorker" in navigator) && ("PushManager" in window) && (!isIOS() || isStandalone()); }
+
+  function subscribePush() {
+    return navigator.serviceWorker.ready.then(function(reg) {
       return reg.pushManager.getSubscription().then(function(existing) {
         if (existing) return existing;
-        return Notification.requestPermission().then(function(perm) {
-          if (perm !== "granted") return null;
-          return reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-          });
+        return reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
         });
       });
     }).then(function(sub) {
-      if (!sub) return;
-      fetch(API + "/api/push/subscribe", {
+      if (!sub) return null;
+      return fetch(API + "/api/push/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
         body: JSON.stringify({ subscription: sub.toJSON() })
+      }).then(function() { return sub; });
+    });
+  }
+
+  function unsubscribePush() {
+    return navigator.serviceWorker.ready.then(function(reg) {
+      return reg.pushManager.getSubscription();
+    }).then(function(sub) {
+      if (!sub) return;
+      var endpoint = sub.endpoint;
+      return sub.unsubscribe().then(function() {
+        return fetch(API + "/api/push/unsubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
+          body: JSON.stringify({ endpoint: endpoint })
+        });
       });
-    }).catch(function() {});
+    });
+  }
+
+  // Called automatically after login/registration — only acts if the user already
+  // granted permission previously (won't pop the permission prompt on its own).
+  function setupPush() {
+    if (!tok || !pushSupported()) { refreshPushUI(); return; }
+    if (Notification.permission === "granted") subscribePush().then(refreshPushUI).catch(refreshPushUI);
+    else refreshPushUI();
+  }
+
+  function refreshPushUI() {
+    var toggle = ge("push-toggle"), status = ge("push-status");
+    if (!toggle || !status) return;
+    if (!pushSupported()) {
+      toggle.disabled = true; toggle.checked = false;
+      status.textContent = isIOS()
+        ? "ב-iPhone יש להוסיף את FunTogether למסך הבית (שיתוף ← הוסף למסך הבית) כדי לקבל התראות."
+        : "הדפדפן הזה לא תומך בהתראות.";
+      return;
+    }
+    if (Notification.permission === "denied") {
+      toggle.disabled = true; toggle.checked = false;
+      status.textContent = "ההתראות נחסמו בדפדפן. אפשר לשנות זאת בהגדרות האתר של הדפדפן.";
+      return;
+    }
+    toggle.disabled = false;
+    navigator.serviceWorker.ready.then(function(reg) { return reg.pushManager.getSubscription(); }).then(function(sub) {
+      toggle.checked = !!sub;
+      status.textContent = sub ? "ההתראות פעילות ✅" : "ההתראות כבויות";
+    });
+  }
+
+  function onPushToggle() {
+    var toggle = ge("push-toggle"), status = ge("push-status");
+    toggle.disabled = true;
+    if (toggle.checked) {
+      Notification.requestPermission().then(function(perm) {
+        if (perm !== "granted") { toggle.checked = false; refreshPushUI(); return; }
+        return subscribePush().then(refreshPushUI);
+      }).catch(refreshPushUI);
+    } else {
+      unsubscribePush().then(refreshPushUI).catch(refreshPushUI);
+    }
   }
 
   // ── SOCKET ──
@@ -1051,6 +1116,7 @@ var _forgotEmail = "";
   // ── PROFILE ──
   function loadProfile() {
     if (!tok) return;
+    refreshPushUI();
     fetch(API + "/api/users/me", { headers: { Authorization: "Bearer " + tok } })
       .then(function(r) {
         if (r.status === 401) { handleUnauth(); return Promise.reject(); }
@@ -1333,6 +1399,7 @@ var _forgotEmail = "";
   ge("msg-inp").addEventListener("keydown", function(e) { if (e.key === "Enter") doSend(); });
   ge("btn-save").addEventListener("click", doSave);
   if (ge("btn-change-pass")) ge("btn-change-pass").addEventListener("click", doChangePass);
+  if (ge("push-toggle")) ge("push-toggle").addEventListener("change", onPushToggle);
   ge("btn-logout").addEventListener("click", function() {
     if (socket) { socket.disconnect(); socket = null; }
     localStorage.removeItem("ft_tok"); localStorage.removeItem("ft_me");
