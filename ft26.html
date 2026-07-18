@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#7c3aed">
@@ -10,8 +10,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="FunTogether">
 <link rel="apple-touch-icon" href="/icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>FunTogether</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -266,23 +264,23 @@ if ('serviceWorker' in navigator) {
       </div>
       <div class="row3">
         <div><span class="flabel">עיניים</span>
-          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="gray">אפור</option></select>
+          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
         </div>
         <div><span class="flabel">שיער</span>
-          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option></select>
+          <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
         </div>
         <div><span class="flabel">עור</span>
-          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark">כהה</option></select>
+          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
         </div>
       </div>
 
       <div class="sec">רקע אישי (אופציונלי)</div>
       <div class="row2">
         <div><span class="flabel">מצב משפחתי</span>
-          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
+          <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
         </div>
         <div><span class="flabel">דת</span>
-          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="other">אחר</option></select>
+          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
         </div>
       </div>
       <span class="flabel">עישון</span>
@@ -469,13 +467,13 @@ if ('serviceWorker' in navigator) {
           </div>
           <div class="row3">
             <div><span class="flabel">עיניים</span>
-              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">שיער</span>
               <select id="e-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
             </div>
             <div><span class="flabel">עור</span>
-              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
+              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
             </div>
           </div>
 
@@ -485,7 +483,7 @@ if ('serviceWorker' in navigator) {
               <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
             </div>
             <div><span class="flabel">לאום</span>
-              <select id="e-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
+              <select id="e-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
             </div>
           </div>
           <span class="flabel">יחס לדת</span>
@@ -534,7 +532,7 @@ if ('serviceWorker' in navigator) {
 
 // Forgot password - 2 step flow
 var _forgotEmail = "";
-(function() {
+document.addEventListener("DOMContentLoaded", function() {
   var lnk = document.getElementById("lnk-forgot");
   if (lnk) {
     lnk.addEventListener("click", function() {
@@ -614,12 +612,9 @@ var _forgotEmail = "";
       errEl.style.display = "block";
     }).finally(function() { btn.textContent = "אפס סיסמה"; btn.disabled = false; });
   });
-})();
+});
 </script>
 
-// showTabGlobal merged into IIFE above
-
-// Forgot password
 <div id="modal-forgot" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;">
     
@@ -667,6 +662,20 @@ var _forgotEmail = "";
   var activeUin = null;
   var unread = 0;
 
+  // מפות תרגום ערכים לעברית (משותף לחיפוש ולמודל הפרופיל)
+  var LBL = {
+    gender:            { male:"זכר", female:"נקבה", other:"אחר" },
+    body_type:         { slim:"רזה", average:"בינוני", athletic:"ספורטיבי", heavy:"שמן" },
+    religion:          { secular:"חילוני", jewish:"יהודי", muslim:"מוסלמי", christian:"נוצרי", druze:"דרוזי", other:"אחר" },
+    religion_attitude: { secular:"חילוני", traditional:"מסורתי", religious:"דתי", other:"אחר" },
+    smoking:           { no:"לא מעשן/ת", occasionally:"לפעמים", yes:"מעשן/ת" },
+    eye_color:         { brown:"חום", blue:"כחול", green:"ירוק", hazel:"אגוז", honey:"דבש", gray:"אפור", other:"אחר" },
+    hair_color:        { black:"שחור", brown:"חום", blonde:"בלונד", red:"אדום", gray:"אפור", satani:"שטני", other:"אחר" },
+    skin_tone:         { fair:"בהיר", medium:"בינוני", olive:"זית", brown:"חום", dark_brown:"שחום", dark:"כהה" },
+    marital_status:    { single:"רווק/ה", married:"נשוי/ה", divorced:"גרוש/ה", widowed:"אלמן/ה", separated:"פרוד/ה" }
+  };
+  function lbl(field, val) { return (LBL[field] && LBL[field][val]) || (val || ""); }
+
   function ge(id) { return document.getElementById(id); }
   function gv(id) { return ge(id).value; }
   function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
@@ -692,6 +701,10 @@ var _forgotEmail = "";
         var el = ge("typing-indicator");
         if (el) { el.style.display = "block"; clearTimeout(el._t); el._t = setTimeout(function(){ el.style.display="none"; }, 2000); }
       }
+    });
+    // אחרי חיבור מחדש — רענן את השיחה הפעילה כדי למשוך הודעות שהוחמצו
+    socket.on("connect", function() {
+      if (activeUin) openChat(activeUin, chats[activeUin] ? chats[activeUin].name : activeUin);
     });
   }
 
@@ -759,7 +772,7 @@ var _forgotEmail = "";
   }
 
   function sanitize(str) {
-    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
 
   function renderMsgs() {
@@ -811,7 +824,12 @@ var _forgotEmail = "";
       headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
       body: JSON.stringify({ receiver_uin: activeUin, content: text })
     }).then(function(r) {
-      if (r.status === 401) handleUnauth();
+      if (r.status === 401) { handleUnauth(); return; }
+      if (!r.ok) {
+        var area = ge("msgs-area");
+        area.insertAdjacentHTML("beforeend", "<div class='sys-msg' style='color:#ef4444;'>⚠️ ההודעה לא נשלחה — נסה שוב</div>");
+        area.scrollTop = area.scrollHeight;
+      }
     }).catch(function() {
       var area = ge("msgs-area");
       area.insertAdjacentHTML("beforeend", "<div class='sys-msg' style='color:#ef4444;'>⚠️ שגיאה בשליחה — בדוק חיבור</div>");
@@ -839,24 +857,26 @@ var _forgotEmail = "";
           ge("sres").innerHTML = "<div class='empty-state'><div class='empty-icon'>&#128532;</div><div class='empty-text'>לא נמצאו משתמשים<br><small>נסה סינון אחר</small></div></div>";
           return;
         }
-        var gmap = { male:"זכר", female:"נקבה", other:"אחר" };
         var html = "<div class='users-grid'>";
         for (var i = 0; i < users.length; i++) {
           var u = users[i];
           var icon = u.gender==="female" ? "&#x1F469;" : u.gender==="male" ? "&#x1F468;" : "&#x1F9D1;";
+          var sName = sanitize(u.name || "");
+          var sUin  = sanitize(u.uin || "");
+          var sGen  = sanitize(u.gender || "");
           var tags = "";
-          if (u.location) tags += "<span class='utag'>&#128205; " + u.location + "</span>";
-          if (u.body_type) tags += "<span class='utag'>" + u.body_type + "</span>";
-          if (u.religion) tags += "<span class='utag'>" + u.religion + "</span>";
+          if (u.location)  tags += "<span class='utag'>&#128205; " + sanitize(u.location) + "</span>";
+          if (u.body_type) tags += "<span class='utag'>" + sanitize(lbl("body_type", u.body_type)) + "</span>";
+          if (u.religion)  tags += "<span class='utag'>" + sanitize(lbl("religion", u.religion)) + "</span>";
           var avatarHtml = u.photo1
-            ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + u.photo1 + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
+            ? "<div class='uav' style='background:none;overflow:hidden;'><img src='" + "https://funtogether-server-production.up.railway.app" + sanitize(u.photo1) + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'></div>"
             : "<div class='uav'>" + icon + "</div>";
-          html += "<div class='ucard' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>"
+          html += "<div class='ucard' data-uin='" + sUin + "' data-name='" + sName + "' data-gender='" + sGen + "'>"
                 + avatarHtml
-                + "<div class='uname'>" + u.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + "</div>"
-                + "<div class='uinfo'>" + (gmap[u.gender]||u.gender) + ", " + u.age + (u.location ? "<br>" + u.location : "") + "</div>"
+                + "<div class='uname'>" + sName + "</div>"
+                + "<div class='uinfo'>" + sanitize(lbl("gender", u.gender)) + ", " + sanitize(u.age) + (u.location ? "<br>" + sanitize(u.location) : "") + "</div>"
                 + "<div style='margin-bottom:10px;'>" + tags + "</div>"
-                + "<button class='btn btn-sm chat-btn' data-uin='" + u.uin + "' data-name='" + u.name + "' data-gender='" + (u.gender||'') + "'>&#128140; שלח הודעה</button>"
+                + "<button class='btn btn-sm chat-btn' data-uin='" + sUin + "' data-name='" + sName + "' data-gender='" + sGen + "'>&#128140; שלח הודעה</button>"
                 + "</div>";
         }
         html += "</div>";
@@ -895,7 +915,6 @@ var _forgotEmail = "";
   }
 
   function renderUmodal(u) {
-    var gmap = { male:"זכר", female:"נקבה", other:"אחר" };
     var icon = u.gender==="female" ? "👩" : u.gender==="male" ? "👨" : "🧑";
     var ph = [];
     if (u.photo1) ph.push(u.photo1);
@@ -908,7 +927,7 @@ var _forgotEmail = "";
       photosHtml += "<div class='ph' style='font-size:64px;'>" + icon + "</div>";
     } else {
       ph.forEach(function(p) {
-        photosHtml += "<div class='ph'><img src='" + API + p + "?t=" + Date.now() + "' onerror=\"this.parentElement.innerHTML='" + icon + "'\"></div>";
+        photosHtml += "<div class='ph'><img src='" + API + sanitize(p) + "?t=" + Date.now() + "' onerror=\"this.parentElement.innerHTML='" + icon + "'\"></div>";
       });
     }
     photosHtml += "</div>";
@@ -916,33 +935,33 @@ var _forgotEmail = "";
     // פרטים
     var rows = [
       ["גיל", u.age ? u.age + " שנים" : null],
-      ["מין", gmap[u.gender] || u.gender],
+      ["מין", lbl("gender", u.gender)],
       ["עיר", u.location],
       ["גובה", u.height ? u.height + " ס\"מ" : null],
-      ["מבנה גוף", u.body_type],
-      ["צבע עיניים", u.eye_color],
-      ["צבע שיער", u.hair_color],
-      ["גוון עור", u.skin_tone],
-      ["מצב משפחתי", u.marital_status],
-      ["דת", u.religion],
-      ["עישון", u.smoking]
+      ["מבנה גוף", lbl("body_type", u.body_type)],
+      ["צבע עיניים", lbl("eye_color", u.eye_color)],
+      ["צבע שיער", lbl("hair_color", u.hair_color)],
+      ["גוון עור", lbl("skin_tone", u.skin_tone)],
+      ["מצב משפחתי", lbl("marital_status", u.marital_status)],
+      ["דת", lbl("religion", u.religion)],
+      ["עישון", lbl("smoking", u.smoking)]
     ].filter(function(r) { return r[1]; });
 
     var detailsHtml = rows.length ? "<div class='umodal-details'>" + rows.map(function(r) {
       return "<div class='umodal-detail'>"
         + "<div class='umodal-detail-label'>" + r[0] + "</div>"
-        + "<div class='umodal-detail-value'>" + String(r[1]).replace(/</g,"&lt;") + "</div>"
+        + "<div class='umodal-detail-value'>" + sanitize(r[1]) + "</div>"
         + "</div>";
     }).join("") + "</div>" : "";
 
-    var bioHtml = u.bio ? "<div class='umodal-bio'><div class='umodal-bio-label'>קצת עליי</div>" + String(u.bio).replace(/</g,"&lt;") + "</div>" : "";
+    var bioHtml = u.bio ? "<div class='umodal-bio'><div class='umodal-bio-label'>קצת עליי</div>" + sanitize(u.bio) + "</div>" : "";
 
     ge("umodal-inner").innerHTML = photosHtml
       + "<div class='umodal-body'>"
       + "<div class='umodal-header'>"
       + "<div class='umodal-av'>" + icon + "</div>"
-      + "<div><div class='umodal-name'>" + String(u.name||"").replace(/</g,"&lt;") + "</div>"
-      + "<div class='umodal-subname'>UIN: " + (u.uin||"") + "</div></div>"
+      + "<div><div class='umodal-name'>" + sanitize(u.name || "") + "</div>"
+      + "<div class='umodal-subname'>UIN: " + sanitize(u.uin || "") + "</div></div>"
       + "</div>"
       + detailsHtml
       + bioHtml
@@ -1132,9 +1151,6 @@ var _forgotEmail = "";
     .then(function(res) {
       if (!res.ok) {
         errEl.textContent = res.d.error || "שגיאה בכניסה"; errEl.style.display = "block";
-        var lf = ge("lnk-forgot"), ls = ge("lnk-forgot-sep");
-        if (lf) { lf.style.display = "inline"; }
-        if (ls) { ls.style.display = "inline"; }
         return;
       }
       tok = res.d.token; me = res.d;

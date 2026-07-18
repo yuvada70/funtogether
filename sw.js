@@ -1,7 +1,7 @@
 // FunTogether Service Worker
-var CACHE = 'funtogether-v1';
+var CACHE = 'funtogether-v2';
 var ASSETS = [
-  '/ft20.html',
+  '/ft26.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
