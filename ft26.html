@@ -302,7 +302,10 @@ if ('serviceWorker' in navigator) {
           <select id="r-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
         </div>
         <div><span class="flabel">דת</span>
-          <select id="r-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
+          <select id="r-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="muslim">מוסלמי</option><option value="other">אחר</option></select>
+        </div>
+        <div><span class="flabel">זיקה לדת</span>
+          <select id="r-religion-attitude" class="finput"><option value="">--</option><option value="religious">דתי</option><option value="haredi">חרדי</option><option value="traditional">מסורתי</option><option value="secular">חילוני</option><option value="other">אחר</option></select>
         </div>
       </div>
       <span class="flabel">עישון</span>
@@ -508,12 +511,12 @@ if ('serviceWorker' in navigator) {
             <div><span class="flabel">מצב משפחתי</span>
               <select id="e-marital" class="finput"><option value="">--</option><option value="single">רווק/ה</option><option value="married">נשוי/ה</option><option value="divorced">גרוש/ה</option><option value="widowed">אלמן/ה</option><option value="separated">פרוד/ה</option></select>
             </div>
-            <div><span class="flabel">לאום</span>
-              <select id="e-religion" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="jewish">יהודי</option><option value="muslim">מוסלמי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="other">אחר</option></select>
+            <div><span class="flabel">דת</span>
+              <select id="e-religion" class="finput"><option value="">--</option><option value="jewish">יהודי</option><option value="christian">נוצרי</option><option value="druze">דרוזי</option><option value="muslim">מוסלמי</option><option value="other">אחר</option></select>
             </div>
           </div>
-          <span class="flabel">יחס לדת</span>
-          <select id="e-religion-attitude" class="finput"><option value="">--</option><option value="secular">חילוני</option><option value="traditional">מסורתי</option><option value="religious">דתי</option><option value="other">אחר</option></select>
+          <span class="flabel">זיקה לדת</span>
+          <select id="e-religion-attitude" class="finput"><option value="">--</option><option value="religious">דתי</option><option value="haredi">חרדי</option><option value="traditional">מסורתי</option><option value="secular">חילוני</option><option value="other">אחר</option></select>
 
           <div class="ok" id="p-ok">&#9989; הפרופיל עודכן בהצלחה!</div>
           <button class="btn" id="btn-save">שמור שינויים</button>
@@ -692,8 +695,8 @@ document.addEventListener("DOMContentLoaded", function() {
   var LBL = {
     gender:            { male:"זכר", female:"נקבה", other:"אחר" },
     body_type:         { slim:"רזה", average:"בינוני", athletic:"ספורטיבי", heavy:"שמן" },
-    religion:          { secular:"חילוני", jewish:"יהודי", muslim:"מוסלמי", christian:"נוצרי", druze:"דרוזי", other:"אחר" },
-    religion_attitude: { secular:"חילוני", traditional:"מסורתי", religious:"דתי", other:"אחר" },
+    religion:          { jewish:"יהודי", christian:"נוצרי", druze:"דרוזי", muslim:"מוסלמי", other:"אחר", secular:"חילוני" },
+    religion_attitude: { religious:"דתי", haredi:"חרדי", traditional:"מסורתי", secular:"חילוני", other:"אחר" },
     smoking:           { no:"לא מעשן/ת", occasionally:"לפעמים", yes:"מעשן/ת" },
     eye_color:         { brown:"חום", blue:"כחול", green:"ירוק", black:"שחור", honey:"דבש", gray:"אפור", other:"אחר", hazel:"אגוז" },
     hair_color:        { black:"שחור", brown:"חום", blonde:"בלונד", red:"אדום", gray:"אפור", satani:"שטני", other:"אחר" },
@@ -973,6 +976,7 @@ document.addEventListener("DOMContentLoaded", function() {
       ["גוון עור", lbl("skin_tone", u.skin_tone)],
       ["מצב משפחתי", lbl("marital_status", u.marital_status)],
       ["דת", lbl("religion", u.religion)],
+      ["זיקה לדת", lbl("religion_attitude", u.religion_attitude)],
       ["עישון", lbl("smoking", u.smoking)]
     ].filter(function(r) { return r[1]; });
 
@@ -1214,6 +1218,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (gv("r-skin"))          body.skin_tone      = gv("r-skin");
     if (gv("r-marital"))       body.marital_status = gv("r-marital");
     if (gv("r-religion"))      body.religion       = gv("r-religion");
+    if (ge("r-religion-attitude") && gv("r-religion-attitude")) body.religion_attitude = gv("r-religion-attitude");
     if (gv("r-smoking"))       body.smoking        = gv("r-smoking");
     if (gv("r-bio").trim())    body.bio            = gv("r-bio").trim();
     var btn = ge("btn-reg"); btn.textContent = "יוצר חשבון..."; btn.disabled = true;
