@@ -7,11 +7,6 @@
 </head>
 <body>
 <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(regs) {
-    regs.forEach(function(reg) { reg.unregister(); });
-  });
-}
 window.location.href = 'ft26.html';
 </script>
 </body>
