@@ -230,13 +230,13 @@ if ('serviceWorker' in navigator) {
     <div class="card">
       <div class="sec">פרטים בסיסיים</div>
       <span class="flabel">שם / כינוי *</span>
-      <input type="text" id="r-name" class="finput" placeholder="StarSeeker_77">
+      <input type="text" id="r-name" class="finput">
       <span class="flabel">אימייל *</span>
-      <input type="email" id="r-email" class="finput" placeholder="your@email.com">
+      <input type="email" id="r-email" class="finput">
       <span class="flabel">סיסמה * (לפחות 6 תווים)</span>
-      <input type="password" id="r-pass" class="finput" placeholder="••••••••">
+      <input type="password" id="r-pass" class="finput">
       <div class="row2">
-        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" placeholder="25" min="18" max="120"></div>
+        <div><span class="flabel">גיל *</span><input type="number" id="r-age" class="finput" min="18" max="120"></div>
         <div><span class="flabel">מגדר *</span>
           <select id="r-gender" class="finput"><option value="male">זכר</option><option value="female">נקבה</option><option value="other">אחר</option></select>
         </div>
@@ -254,25 +254,47 @@ if ('serviceWorker' in navigator) {
 <option value="דרום">דרום</option>
 <option value="שומרון ויהודה">שומרון ויהודה</option>
       </select>
+      <span class="flabel">יישוב</span>
+      <input type="text" id="r-city" class="finput" list="il-cities" placeholder="בחר או הקלד יישוב">
+      <datalist id="il-cities">
+        <option value="תל אביב-יפו"></option><option value="ירושלים"></option><option value="חיפה"></option>
+        <option value="ראשון לציון"></option><option value="פתח תקווה"></option><option value="אשדוד"></option>
+        <option value="נתניה"></option><option value="באר שבע"></option><option value="בני ברק"></option>
+        <option value="חולון"></option><option value="רמת גן"></option><option value="אשקלון"></option>
+        <option value="רחובות"></option><option value="בת ים"></option><option value="בית שמש"></option>
+        <option value="כפר סבא"></option><option value="הרצליה"></option><option value="חדרה"></option>
+        <option value="מודיעין-מכבים-רעות"></option><option value="נצרת"></option><option value="לוד"></option>
+        <option value="רמלה"></option><option value="רעננה"></option><option value="גבעתיים"></option>
+        <option value="הוד השרון"></option><option value="קריית אתא"></option><option value="קריית גת"></option>
+        <option value="נהריה"></option><option value="אילת"></option><option value="טבריה"></option>
+        <option value="קריית מוצקין"></option><option value="קריית ביאליק"></option><option value="אום אל-פחם"></option>
+        <option value="כרמיאל"></option><option value="עפולה"></option><option value="ראש העין"></option>
+        <option value="נס ציונה"></option><option value="אור יהודה"></option><option value="יבנה"></option>
+        <option value="דימונה"></option><option value="טמרה"></option><option value="סח'נין"></option>
+        <option value="קריית שמונה"></option><option value="נוף הגליל"></option><option value="מעלה אדומים"></option>
+        <option value="בית שאן"></option><option value="יהוד-מונוסון"></option><option value="אריאל"></option>
+      </datalist>
 
       <div class="sec">מראה חיצוני (אופציונלי)</div>
       <div class="row2">
-        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput" placeholder="170"></div>
+        <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="r-height" class="finput"></div>
         <div><span class="flabel">מסגרת גוף</span>
           <select id="r-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
         </div>
       </div>
       <div class="row3">
         <div><span class="flabel">עיניים</span>
-          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+          <select id="r-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="black">שחור</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
         </div>
-        <div><span class="flabel">שיער</span>
+        <div><span class="flabel">צבע שיער</span>
           <select id="r-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
         </div>
-        <div><span class="flabel">עור</span>
-          <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
+        <div><span class="flabel">סוג שיער</span>
+          <select id="r-hairtype" class="finput"><option value="">--</option><option value="long">ארוך</option><option value="short">קצר</option><option value="bald">קירח</option></select>
         </div>
       </div>
+      <span class="flabel">גוון עור</span>
+      <select id="r-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="dark">כהה</option><option value="tanned">שזוף</option><option value="pale">לבנבן</option><option value="black">שחור</option><option value="other">אחר</option></select>
 
       <div class="sec">רקע אישי (אופציונלי)</div>
       <div class="row2">
@@ -452,12 +474,14 @@ if ('serviceWorker' in navigator) {
               </select>
             </div>
           </div>
+          <span class="flabel">יישוב</span>
+          <input type="text" id="e-city" class="finput" list="il-cities" placeholder="בחר או הקלד יישוב">
           <span class="flabel">קצת עליי</span>
           <textarea id="e-bio" class="finput" rows="3"></textarea>
 
           <div class="sec" style="font-size:11px;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;padding-bottom:6px;border-bottom:1.5px solid #ede8f8;">מראה חיצוני</div>
           <div class="row3">
-            <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="e-height" class="finput" placeholder="170"></div>
+            <div><span class="flabel">גובה (ס"מ)</span><input type="number" id="e-height" class="finput"></div>
             <div><span class="flabel">מבנה גוף</span>
               <select id="e-body" class="finput"><option value="">--</option><option value="slim">רזה</option><option value="average">בינוני</option><option value="athletic">ספורטיבי</option><option value="heavy">שמן</option></select>
             </div>
@@ -467,15 +491,17 @@ if ('serviceWorker' in navigator) {
           </div>
           <div class="row3">
             <div><span class="flabel">עיניים</span>
-              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="hazel">אגוז</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
+              <select id="e-eyes" class="finput"><option value="">--</option><option value="brown">חום</option><option value="blue">כחול</option><option value="green">ירוק</option><option value="black">שחור</option><option value="honey">דבש</option><option value="gray">אפור</option><option value="other">אחר</option></select>
             </div>
-            <div><span class="flabel">שיער</span>
+            <div><span class="flabel">צבע שיער</span>
               <select id="e-hair" class="finput"><option value="">--</option><option value="black">שחור</option><option value="brown">חום</option><option value="blonde">בלונד</option><option value="red">אדום</option><option value="gray">אפור</option><option value="satani">שטני</option><option value="other">אחר</option></select>
             </div>
-            <div><span class="flabel">עור</span>
-              <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="medium">בינוני</option><option value="olive">זית</option><option value="brown">חום</option><option value="dark_brown">שחום</option><option value="dark">כהה</option></select>
+            <div><span class="flabel">סוג שיער</span>
+              <select id="e-hairtype" class="finput"><option value="">--</option><option value="long">ארוך</option><option value="short">קצר</option><option value="bald">קירח</option></select>
             </div>
           </div>
+          <span class="flabel">גוון עור</span>
+          <select id="e-skin" class="finput"><option value="">--</option><option value="fair">בהיר</option><option value="dark">כהה</option><option value="tanned">שזוף</option><option value="pale">לבנבן</option><option value="black">שחור</option><option value="other">אחר</option></select>
 
           <div class="sec" style="font-size:11px;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px;padding-bottom:6px;border-bottom:1.5px solid #ede8f8;">רקע אישי</div>
           <div class="row2">
@@ -669,9 +695,10 @@ document.addEventListener("DOMContentLoaded", function() {
     religion:          { secular:"חילוני", jewish:"יהודי", muslim:"מוסלמי", christian:"נוצרי", druze:"דרוזי", other:"אחר" },
     religion_attitude: { secular:"חילוני", traditional:"מסורתי", religious:"דתי", other:"אחר" },
     smoking:           { no:"לא מעשן/ת", occasionally:"לפעמים", yes:"מעשן/ת" },
-    eye_color:         { brown:"חום", blue:"כחול", green:"ירוק", hazel:"אגוז", honey:"דבש", gray:"אפור", other:"אחר" },
+    eye_color:         { brown:"חום", blue:"כחול", green:"ירוק", black:"שחור", honey:"דבש", gray:"אפור", other:"אחר", hazel:"אגוז" },
     hair_color:        { black:"שחור", brown:"חום", blonde:"בלונד", red:"אדום", gray:"אפור", satani:"שטני", other:"אחר" },
-    skin_tone:         { fair:"בהיר", medium:"בינוני", olive:"זית", brown:"חום", dark_brown:"שחום", dark:"כהה" },
+    hair_type:         { long:"ארוך", short:"קצר", bald:"קירח" },
+    skin_tone:         { fair:"בהיר", dark:"כהה", tanned:"שזוף", pale:"לבנבן", black:"שחור", other:"אחר", medium:"בינוני", olive:"זית", brown:"חום", dark_brown:"שחום" },
     marital_status:    { single:"רווק/ה", married:"נשוי/ה", divorced:"גרוש/ה", widowed:"אלמן/ה", separated:"פרוד/ה" }
   };
   function lbl(field, val) { return (LBL[field] && LBL[field][val]) || (val || ""); }
@@ -936,11 +963,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var rows = [
       ["גיל", u.age ? u.age + " שנים" : null],
       ["מין", lbl("gender", u.gender)],
-      ["עיר", u.location],
+      ["אזור", u.location],
+      ["יישוב", u.city],
       ["גובה", u.height ? u.height + " ס\"מ" : null],
       ["מבנה גוף", lbl("body_type", u.body_type)],
       ["צבע עיניים", lbl("eye_color", u.eye_color)],
       ["צבע שיער", lbl("hair_color", u.hair_color)],
+      ["סוג שיער", lbl("hair_type", u.hair_type)],
       ["גוון עור", lbl("skin_tone", u.skin_tone)],
       ["מצב משפחתי", lbl("marital_status", u.marital_status)],
       ["דת", lbl("religion", u.religion)],
@@ -1056,6 +1085,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if (ge("e-eyes"))             ge("e-eyes").value             = d.eye_color || "";
         if (ge("e-hair"))             ge("e-hair").value             = d.hair_color || "";
         if (ge("e-skin"))             ge("e-skin").value             = d.skin_tone || "";
+        if (ge("e-hairtype"))         ge("e-hairtype").value         = d.hair_type || "";
+        if (ge("e-city"))             ge("e-city").value             = d.city || "";
         if (ge("e-marital"))          ge("e-marital").value          = d.marital_status || "";
         if (ge("e-religion"))         ge("e-religion").value         = d.religion || "";
         if (ge("e-religion-attitude")) ge("e-religion-attitude").value = d.religion_attitude || "";
@@ -1076,10 +1107,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (ge("e-age").value) body.age = parseInt(ge("e-age").value);
     body.location          = ge("e-loc").value.trim();
     body.bio               = ge("e-bio").value.trim();
+    if (ge("e-city"))             body.city              = ge("e-city").value.trim();
     if (ge("e-height") && ge("e-height").value) body.height = parseInt(ge("e-height").value);
     if (ge("e-body"))             body.body_type         = ge("e-body").value;
     if (ge("e-eyes"))             body.eye_color         = ge("e-eyes").value;
     if (ge("e-hair"))             body.hair_color        = ge("e-hair").value;
+    if (ge("e-hairtype"))         body.hair_type         = ge("e-hairtype").value;
     if (ge("e-skin"))             body.skin_tone         = ge("e-skin").value;
     if (ge("e-marital"))          body.marital_status    = ge("e-marital").value;
     if (ge("e-religion"))         body.religion          = ge("e-religion").value;
@@ -1172,10 +1205,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!age || age < 18) { errEl.textContent = "נא להכניס גיל (18+)"; errEl.style.display="block"; return; }
     var body = { name:name, email:email, password:pass, age:age, gender:gender };
     if (gv("r-loc").trim())    body.location       = gv("r-loc").trim();
+    if (ge("r-city") && gv("r-city").trim()) body.city = gv("r-city").trim();
     if (gv("r-height"))        body.height         = parseInt(gv("r-height"));
     if (gv("r-body"))          body.body_type      = gv("r-body");
     if (gv("r-eyes"))          body.eye_color      = gv("r-eyes");
     if (gv("r-hair"))          body.hair_color     = gv("r-hair");
+    if (ge("r-hairtype") && gv("r-hairtype")) body.hair_type = gv("r-hairtype");
     if (gv("r-skin"))          body.skin_tone      = gv("r-skin");
     if (gv("r-marital"))       body.marital_status = gv("r-marital");
     if (gv("r-religion"))      body.religion       = gv("r-religion");
